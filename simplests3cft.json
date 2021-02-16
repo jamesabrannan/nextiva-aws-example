@@ -8,7 +8,7 @@
     "Outputs": {
         "BucketName": {
             "Value": {
-                "Ref": "JamesSimpleS3Bucket"
+                "Ref": "S3Bucket"
             },
             "Description": "Name of the sample Amazon S3 bucket."
         }
