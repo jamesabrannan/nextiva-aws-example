@@ -14,7 +14,7 @@ pipeline {
 
                 //run the cloudformation template that builds
                 // neccessary resources for the AWS stack. Note: uses the SAM cli
-                sh "node ./deploy.js -b recording-demo-cnf-deploy-bucket -s recording-demo-cnf-stack -i 123456789012.dkr.ecr.us-east-1.amazonaws.com/recording-demo:latest -r us-east-1"
+                sh "node ./deploy.js -b recording-demo-james-deploy-bucket -s recording-demo-cnf-stack -i 123456789012.dkr.ecr.us-east-1.amazonaws.com/recording-demo:latest -r us-east-1"
             }
         }
     }
