@@ -1,13 +1,21 @@
 pipeline {
     agent any
     stages {
-        stage('Submit Stack') {
+        stage('Create-Docker-Deploy-ECR') {
             steps {
-             sh "whoami"
-            //sh "aws cloudformation create-stack --stack-name s3bucket --template-body file://simplests3cft.json --region 'us-east-1'"
-            sh "make ECR_REPO_URI='743327341874.dkr.ecr.us-east-1.amazonaws.com/nextiva-aws-example-repository'"
-            //sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 743327341874.dkr.ecr.us-east-1.amazonaws.com/nextiva-aws-example-repository"
+                //run the script to create Docker Container and deploy in ECR repository
+                //this is a makefile that combines docker and aws install of container
+                sh "make ECR_REPO_URI='743327341874.dkr.ecr.us-east-1.amazonaws.com/nextiva-aws-example-repository'"
             }
-             }
+        }
+        stage('Deploy CloudFormation') {
+                // this step runs deploy.js to
+            steps {
+
+                //run the cloudformation template that builds
+                // neccessary resources for the AWS stack. Note: uses the SAM cli
+                sh "node ./deploy.js -b recording-demo-cnf-deploy-bucket -s recording-demo-cnf-stack -i 123456789012.dkr.ecr.us-east-1.amazonaws.com/recording-demo:latest -r us-east-1"
             }
-            }
+        }
+    }
+}
