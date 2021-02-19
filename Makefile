@@ -14,7 +14,7 @@ SHELL := /bin/bash
 all: build_upload
 
 build_upload:
-	
+	echo $(REPO_NAME)
 	@REGEX='^[0-9]{12}\.dkr\.ecr\..+\.amazonaws\.com\/[a-z0-9_/-]+$$'; \
 	if [[ $(ECR_REPO_URI) =~ $$REGEX ]]; then \
 		echo "Valid ECR URI format"; else \
