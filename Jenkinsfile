@@ -1,6 +1,12 @@
 pipeline {
     agent any
+    tools {nodejs "node"}
     stages {
+            stage('Example') {
+                steps {
+                    sh 'npm config ls'
+                }
+        }
         stage('Create-Docker-Deploy-ECR') {
             steps {
                 //run the script to create Docker Container and deploy in ECR repository
