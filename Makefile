@@ -1,7 +1,7 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-IMAGE_NAME=media-call-recording
+IMAGE_NAME=mediacallrecording
 IMAGE_VERSION=latest
 ENV_FILE=container.env
 CONTAINER_NAME=recording
