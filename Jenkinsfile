@@ -1,7 +1,5 @@
 pipeline {
     agent any
-    tools {nodejs "node"}
-
     stages {
         stage('Create-Docker-Deploy-ECR') {
             steps {
