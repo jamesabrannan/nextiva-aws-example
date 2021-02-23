@@ -1,11 +1,10 @@
+def ECR_ARN = "743327341874.dkr.ecr.us-east-1.amazonaws.com/nextiva-aws-example-repository"
+def ECR_NAME = "nextiva-aws-example-repository"
+def AWS_REGION = "us-east-1"
+def DOCKER_TAG = "latest"
 pipeline {
     agent any
-    environment {
-        ECR_ARN = "743327341874.dkr.ecr.us-east-1.amazonaws.com/nextiva-aws-example-repository"
-        ECR_NAME = "nextiva-aws-example-repository"
-        AWS_REGION = "us-east-1"
-        DOCKER_TAG = "latest"
-    }
+
     stages {
         stage('Create-Docker-Deploy-ECR') {
             steps {
