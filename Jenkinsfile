@@ -64,28 +64,31 @@ pipeline {
         }
         stage('Deploy CloudFormation Resources'){
             steps {
-                try {
-                    sh "sam package --s3-bucket ${S3_BUCKET} --template-file ${SAM_TEMPLATE} --output-template-file ${SAM_BUILD_TEMPLATE} --region ${AWS_REGION}"
-                    echo 'sam template packaged'
-                }
-                catch(err){
-                    echo ${err}
-                    currentBuild.result = 'FAILURE'
-                }
-                try {
-                    sh "sam deploy --template-file ./build/packaged.yaml --stack-name ${STACK_NAME} --parameter-overrides ECRDockerImageArn=${ECR_ARN} --capabilities CAPABILITY_IAM --region ${AWS_REGION} --no-fail-on-empty-changeset"
-                }
-                catch(err){
-                    echo ${err}
-                    echo 'sam deployment failed '
-                    currentBuild.result = 'FAILURE'
-                }
-                try {
-                        sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query 'Stacks[0].Outputs[0].OutputValue' --output text --region ${AWS_REGION}"             
-                }
-                catch(err){
+                script 
+                {
+                   try {
+                        sh "sam package --s3-bucket ${S3_BUCKET} --template-file ${SAM_TEMPLATE} --output-template-file ${SAM_BUILD_TEMPLATE} --region ${AWS_REGION}"
+                        echo 'sam template packaged'
+                    }
+                    catch(err){
                         echo ${err}
                         currentBuild.result = 'FAILURE'
+                    }
+                    try {
+                        sh "sam deploy --template-file ./build/packaged.yaml --stack-name ${STACK_NAME} --parameter-overrides ECRDockerImageArn=${ECR_ARN} --capabilities CAPABILITY_IAM --region ${AWS_REGION} --no-fail-on-empty-changeset"
+                    }
+                    catch(err){
+                        echo ${err}
+                        echo 'sam deployment failed '
+                       currentBuild.result = 'FAILURE'
+                     }
+                    try {
+                            sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query 'Stacks[0].Outputs[0].OutputValue' --output text --region ${AWS_REGION}"             
+                    }
+                    catch(err){
+                            echo ${err}
+                            currentBuild.result = 'FAILURE'
+                    }
                 }
             }
         }
