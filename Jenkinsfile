@@ -2,6 +2,7 @@ def ECR_ARN = "743327341874.dkr.ecr.us-east-1.amazonaws.com/nextiva-aws-example-
 def ECR_NAME = "nextiva-aws-example-repository"
 def AWS_REGION = "us-east-1"
 def DOCKER_TAG = "latest"
+def S3_BUCKET = "james-deploy-a123-bucket"
 pipeline {
     agent any
 
