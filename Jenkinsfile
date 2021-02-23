@@ -13,11 +13,12 @@ pipeline {
                 script{
                     // ensure that aws and sam are installed
                     try {
-                        sh "aws --verxsion"
+                        sh "aws --version"
                         sh "sam --version"
                         echo 'aws and sam installed'
                     }
                     catch(err){
+                        echo 'could not find aws or sam installation'
                         echo ${err}
                     }
                 }
