@@ -10,7 +10,18 @@ pipeline {
     stages {
         stage('Create-Docker-Deploy-ECR') {
             steps {
-                // need to do this cause can't figure out docker chmod 777 /var/run/docker.sock"
+                script{
+                    // ensure that aws and sam are installed
+                    try {
+                        sh "aws --verxsion"
+                        sh "sam --version"
+                        echo 'aws and sam installed'
+                    }
+                    catch(err){
+                        echo ${err}
+                    }
+                }
+                // might get docker errors so need docker chmod 777 /var/run/docker.sock"
                 sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_ARN}"
                 sh "docker build -t  ${ECR_NAME} ."
                 sh "docker tag ${ECR_NAME}:${DOCKER_TAG} ${ECR_ARN}:${DOCKER_TAG}"
