@@ -4,6 +4,7 @@ def AWS_REGION = "us-east-1"
 def DOCKER_TAG = "latest"
 def S3_BUCKET = "james-deploy-a123-bucket"
 def S3_BUCKET_ERROR = "An error occurred (404) when calling the HeadBucket operation: Not Found"
+def EC2_AIM_IMAGE_NAME = "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id"
 pipeline {
     agent any
 
@@ -20,6 +21,14 @@ pipeline {
                     catch(err){
                         echo 'could not find aws or sam installation'
                         echo ${err}
+                    }
+                    // ensure the EC2 AIM that will be deployed exists
+                    try {
+                        sh "aws ssm get-parameters --names ${EC2_AIM_IMAGE_NAME} --region ${AWS_REGION} --query Parameters[0].Value"
+                        echo "aws aim exists. ${EC2_AIM_IMAGE_NAME}"
+                    }
+                    catch(err){
+                        echo 'the required EC2 AIM not found'
                     }
                 }
                 // might get docker errors so need docker chmod 777 /var/run/docker.sock"
