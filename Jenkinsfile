@@ -80,35 +80,14 @@ pipeline {
                     echo 'sam deployment failed '
                     currentBuild.result = 'FAILURE'
                 }
-                //script {
-                    try {
+                try {
                         sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query 'Stacks[0].Outputs[0].OutputValue' --output text --region ${AWS_REGION}"             
-                    }
-                    catch(err){
+                }
+                catch(err){
                         echo ${err}
                         currentBuild.result = 'FAILURE'
-                    }
-//                    try {
- //                       def ecsClusterName= sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[1].OutputValue --output text --region ${AWS_REGION}"
-   //                     def autoScalingGroupName= sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query 'Stacks[0].Outputs[2].OutputValue' --output text --region ${AWS_REGION}"
-
-
-
-     //               }
-       //             catch(err){
-         //               echo ${err}
-           //             currentBuild.result = 'FAILURE'
-
-             //       }
-               // }
-            //}
+                }
+            }
         }
-
-
-       // stage('Build CloudFormation Stack'){
-       //     steps {
-       //         sh "node ./deploy.js -b recording-demo-james123-deploy-bucket -s recording-demo-cnf-stack -i 743327341874.dkr.ecr.us-east-1.amazonaws.com///nextiva-aws-example-repository:latest -r us-east-1"
-       //     }
-       // }
     }
 }
