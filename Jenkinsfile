@@ -21,6 +21,7 @@ pipeline {
                     catch(err){
                         echo 'could not find aws or sam installation'
                         echo ${err}
+                        currentBuild.result = 'FAILURE'
                     }
                     // ensure the EC2 AIM that will be deployed exists
                     try {
@@ -29,6 +30,7 @@ pipeline {
                     }
                     catch(err){
                         echo 'the required EC2 AIM not found'
+                        currentBuild.result = 'FAILURE'
                     }
                 }
                 // might get docker errors so need docker chmod 777 /var/run/docker.sock"
