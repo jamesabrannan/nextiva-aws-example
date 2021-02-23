@@ -82,25 +82,25 @@ pipeline {
                 }
                 script {
                     try {
-                        def recording-url = sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[0].OutputValue --output text --region ${AWS_REGION}"
+                        def recording-url = sh returnStdout:true, script:"aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[0].OutputValue --output text --region ${AWS_REGION}"
                         echo "Recording API Gateway invoke URL: ${recording-url}"             
                     }
                     catch(err){
                         echo ${err}
                         currentBuild.result = 'FAILURE'
                     }
-                    try {
-                        def ecsClusterName= sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[1].OutputValue --output text --region ${AWS_REGION}"
-                        def autoScalingGroupName= sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query 'Stacks[0].Outputs[2].OutputValue' --output text --region ${AWS_REGION}"
+//                    try {
+ //                       def ecsClusterName= sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[1].OutputValue --output text --region ${AWS_REGION}"
+   //                     def autoScalingGroupName= sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query 'Stacks[0].Outputs[2].OutputValue' --output text --region ${AWS_REGION}"
 
 
 
-                    }
-                    catch(err){
-                        echo ${err}
-                        currentBuild.result = 'FAILURE'
+     //               }
+       //             catch(err){
+         //               echo ${err}
+           //             currentBuild.result = 'FAILURE'
 
-                    }
+             //       }
                 }
             }
         }
