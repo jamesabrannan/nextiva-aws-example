@@ -20,9 +20,12 @@ pipeline {
         stage('Create S3 Bucket') {
             steps{
                 script{
-                    def isbucket = sh "aws s3api head-bucket --bucket ${S3_BUCKET} --region ${AWS_REGION}"
-                    if(isbucket == ${S3_BUCKET_ERROR}){
+                    try {
                         sh "aws s3 mb s3://${S3_BUCKET} --region ${AWS_REGION}"
+                        echo 'bucket created'
+                    }
+                    catch(err){
+                        echo ${err}
                     }
                 }
             }
