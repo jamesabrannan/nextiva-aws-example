@@ -3,6 +3,7 @@ def ECR_NAME = "nextiva-aws-example-repository"
 def AWS_REGION = "us-east-1"
 def DOCKER_TAG = "latest"
 def S3_BUCKET = "james-deploy-a123-bucket"
+def S3_BUCKET_ERROR = "An error occurred (404) when calling the HeadBucket operation: Not Found"
 pipeline {
     agent any
 
@@ -20,7 +21,9 @@ pipeline {
             steps{
                 script{
                     def isbucket = sh "aws s3api head-bucket --bucket ${S3_BUCKET} --region ${AWS_REGION}"
-                    echo ${isbucket}
+                    if(isbucket == ${S3_BUCKET_ERROR}){
+                        sh "aws s3 mb s3://${S3_BUCKET} --region ${AWS_REGION}"
+                    }
                 }
             }
         }
