@@ -82,7 +82,7 @@ pipeline {
                 }
                 script {
                     try {
-                        def recording-url = sh returnStdout:true, script:"aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[0].OutputValue --output text --region ${AWS_REGION}"
+                        def recording-url = sh returnStdout:true, script:"aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query 'Stacks[0].Outputs[0].OutputValue' --output text --region ${AWS_REGION}"
                         echo "Recording API Gateway invoke URL: ${recording-url}"             
                     }
                     catch(err){
