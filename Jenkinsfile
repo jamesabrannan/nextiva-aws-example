@@ -5,11 +5,15 @@ def DOCKER_TAG = "latest"
 def S3_BUCKET = "james-deploy-a123-bucket"
 def S3_BUCKET_ERROR = "An error occurred (404) when calling the HeadBucket operation: Not Found"
 def EC2_AIM_IMAGE_NAME = "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id"
+def SAM_TEMPLATE = "./templates/RecordingDemoCloudformationTemplate.yaml"
+def SAM_BUILD_TEMPLATE = "./build/packaged.yaml"
+def STACK_NAME = "recording-demo-a123-stack"
+
 pipeline {
     agent any
 
     stages {
-        stage('Create-Docker-Deploy-ECR') {
+        stage('Ensure AWS Resources') {
             steps {
                 script{
                     // ensure that aws and sam are installed
@@ -33,6 +37,10 @@ pipeline {
                         currentBuild.result = 'FAILURE'
                     }
                 }
+            }
+        }
+        stage('Create-Docker-Deploy-ECR') {
+            steps{
                 // might get docker errors so need docker chmod 777 /var/run/docker.sock"
                 sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_ARN}"
                 sh "docker build -t  ${ECR_NAME} ."
@@ -49,6 +57,49 @@ pipeline {
                     }
                     catch(err){
                         echo ${err}
+                        currentBuild.result = 'FAILURE'
+                    }
+                }
+            }
+        }
+        stage('Deploy CloudFormation Resources'){
+            steps {
+                try {
+                    sh "sam package --s3-bucket ${S3_BUCKET} --template-file ${SAM_TEMPLATE} --output-template-file', ${SAM_BUILD_TEMPLATE} --region ${AWS_REGION}"
+                    echo 'sam template packaged'
+                }
+                catch(err){
+                    echo ${err}
+                    currentBuild.result = 'FAILURE'
+                }
+                try {
+                    sh "sam deploy --template-file ./build/packaged.yaml --stack-name ${STACK_NAME} --parameter-overrides ECRDockerImageArn=${ECR_ARN} --capabilities CAPABILITY_IAM --region ${AWS_REGION} --no-fail-on-empty-changeset"
+                }
+                catch(err){
+                    echo ${err}
+                    echo 'sam deployment failed '
+                    currentBuild.result = 'FAILURE'
+                }
+                script {
+                    try {
+                        def recording-url = sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[0].OutputValue --output text --region ${AWS_REGION}"
+                        echo "Recording API Gateway invoke URL: ${recording-url}"             
+                    }
+                    catch(err){
+                        echo ${err}
+                        currentBuild.result = 'FAILURE'
+                    }
+                    try {
+                        def ecsClusterName= sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[1].OutputValue --output text --region ${AWS_REGION}"
+                        def autoScalingGroupName= sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[2].OutputValue --output text --region ${AWS_REGION}"
+
+
+
+                    }
+                    catch(err){
+                        echo ${err}
+                        currentBuild.result = 'FAILURE'
+
                     }
                 }
             }
