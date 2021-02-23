@@ -15,6 +15,16 @@ pipeline {
                 sh "docker push ${ECR_ARN}:${DOCKER_TAG}"
             }
         }
+        stage('Create S3 Bucket') {
+            steps{
+                script{
+                    def isbucket = sh "aws s3api head-bucket --bucket ${S3_BUCKET} --region ${AWS_REGION}"
+                    echo ${isbucket}
+                }
+            }
+        }
+
+
        // stage('Build CloudFormation Stack'){
        //     steps {
        //         sh "node ./deploy.js -b recording-demo-james123-deploy-bucket -s recording-demo-cnf-stack -i 743327341874.dkr.ecr.us-east-1.amazonaws.com///nextiva-aws-example-repository:latest -r us-east-1"
