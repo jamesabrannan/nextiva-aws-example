@@ -80,10 +80,9 @@ pipeline {
                     echo 'sam deployment failed '
                     currentBuild.result = 'FAILURE'
                 }
-                script {
+                //script {
                     try {
-                        def recording-url = sh returnStdout:true, script:"aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query 'Stacks[0].Outputs[0].OutputValue' --output text --region ${AWS_REGION}"
-                        echo "Recording API Gateway invoke URL: ${recording-url}"             
+                        sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query 'Stacks[0].Outputs[0].OutputValue' --output text --region ${AWS_REGION}"             
                     }
                     catch(err){
                         echo ${err}
@@ -101,7 +100,7 @@ pipeline {
            //             currentBuild.result = 'FAILURE'
 
              //       }
-                }
+               // }
             }
         }
 
