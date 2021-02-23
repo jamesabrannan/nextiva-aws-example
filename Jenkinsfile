@@ -65,7 +65,7 @@ pipeline {
         stage('Deploy CloudFormation Resources'){
             steps {
                 try {
-                    sh "sam package --s3-bucket ${S3_BUCKET} --template-file ${SAM_TEMPLATE} --output-template-file', ${SAM_BUILD_TEMPLATE} --region ${AWS_REGION}"
+                    sh "sam package --s3-bucket ${S3_BUCKET} --template-file ${SAM_TEMPLATE} --output-template-file ${SAM_BUILD_TEMPLATE} --region ${AWS_REGION}"
                     echo 'sam template packaged'
                 }
                 catch(err){
@@ -82,7 +82,7 @@ pipeline {
                 }
                 script {
                     try {
-                        def recording-url = sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query 'Stacks[0].Outputs[0].OutputValue' --output text --region ${AWS_REGION}"
+                        def recording-url = sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[0].OutputValue --output text --region ${AWS_REGION}"
                         echo "Recording API Gateway invoke URL: ${recording-url}"             
                     }
                     catch(err){
@@ -90,7 +90,7 @@ pipeline {
                         currentBuild.result = 'FAILURE'
                     }
                     try {
-                        def ecsClusterName= sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query 'Stacks[0].Outputs[1].OutputValue' --output text --region ${AWS_REGION}"
+                        def ecsClusterName= sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[1].OutputValue --output text --region ${AWS_REGION}"
                         def autoScalingGroupName= sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query 'Stacks[0].Outputs[2].OutputValue' --output text --region ${AWS_REGION}"
 
 
