@@ -11,8 +11,8 @@ pipeline {
                 // need to do this cause can't figure out docker chmod 777 /var/run/docker.sock"
                 sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_ARN}"
                 sh "docker build -t  ${ECR_NAME} ."
-                sh "docker tag ${ECR_NAME}:${DOCKER_TAG} ${ECR_ARN}/${ECR_NAME}:${DOCKER_TAG}"
-                sh "docker push ${ECR_ARN}/${ECR_NAME}:${DOCKER_TAG}"
+                sh "docker tag ${ECR_NAME}:${DOCKER_TAG} ${ECR_ARN}:${DOCKER_TAG}"
+                sh "docker push ${ECR_ARN}:${DOCKER_TAG}"
             }
         }
        // stage('Build CloudFormation Stack'){
