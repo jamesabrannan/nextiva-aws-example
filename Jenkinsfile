@@ -85,5 +85,18 @@ pipeline {
                 }
             }
         }
+        stage('Configure AutoScaling Post CloudFormation'){
+            steps {
+                script{
+                    try {
+                        def invokeUrl = sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[2].OutputValue --output text --region ${AWS_REGION}"
+                    }
+                    catch(err){
+                        echo ${err}
+                        currentBuild.result = 'FAILURE'
+                    }
+                }
+            }
+        }
     }
 }
