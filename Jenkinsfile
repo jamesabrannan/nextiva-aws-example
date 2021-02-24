@@ -82,13 +82,6 @@ pipeline {
                         echo 'sam deployment failed '
                        currentBuild.result = 'FAILURE'
                      }
-                    try {
-                            sh "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query 'Stacks[0].Outputs[0].OutputValue' --output text --region ${AWS_REGION}"             
-                    }
-                    catch(err){
-                            echo ${err}
-                            currentBuild.result = 'FAILURE'
-                    }
                 }
             }
         }
