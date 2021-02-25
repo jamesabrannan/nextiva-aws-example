@@ -33,6 +33,7 @@ pipeline {
 
                         def autoScalingGroupInstances = jsonAsg.AutoScalingGroups + jsonAsg.AutoScalingGroups[0].Instances 
                         def autoScalingGroupArn = jsonAsg.AutoScalingGroups + jsonAsg.AutoScalingGroups[0].AutoScalingGroupARN
+                        def autoScalingGroupCapacityProviderName = autoScalingGroupName + 'CapacityProvider';
 
                         }
 
