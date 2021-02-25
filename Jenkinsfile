@@ -27,8 +27,7 @@ pipeline {
                         sh script:"aws autoscaling update-auto-scaling-group --auto-scaling-group-name $autoScalingGroupName --new-instances-protected-from-scale-in", returnStdout:true
 
                         def asg = sh (script:"aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name $autoScalingGroupName", returnStdout:true).trim()
-
-                        echo asg
+                        def jsonAsg = readJSON text: asg
 
                     }
                     catch(err){
