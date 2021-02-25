@@ -30,6 +30,10 @@ pipeline {
                         def jsonAsg = readJSON text: asg , returnPojo: true
                         jsonAsg.each { key, value ->
                         echo "Walked through key $key and value $value"
+
+                        def autoScalingGroupInstances = jsonAsg['AutoScalingGroups'] + jsonAsg['AutoScalingGroups[0].Instances']
+                        echo autoScalingGroupInstances
+
                         }
 
                     }
