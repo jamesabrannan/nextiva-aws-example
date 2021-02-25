@@ -29,6 +29,8 @@ pipeline {
 
                         echo autoScalingGroupName
 
+                        sh "aws autoscaling update-auto-scaling-group --auto-scaling-group-name ${autoScalingGroupName} --new-instances-protected-from-scale-in"
+
                     }
                     catch(err){
                         echo ${err}
