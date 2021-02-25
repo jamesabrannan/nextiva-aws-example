@@ -27,7 +27,10 @@ pipeline {
                         sh script:"aws autoscaling update-auto-scaling-group --auto-scaling-group-name $autoScalingGroupName --new-instances-protected-from-scale-in", returnStdout:true
 
                         def asg = sh (script:"aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name $autoScalingGroupName", returnStdout:true).trim()
-                        def jsonAsg = readJSON text: asg
+                        def jsonAsg = readJSON text: asg , returnPojo: true
+                        props.each { key, value ->
+                        echo "Walked through key $key and value $value"
+                        }
 
                     }
                     catch(err){
