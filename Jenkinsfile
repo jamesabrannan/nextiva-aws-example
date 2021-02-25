@@ -38,6 +38,8 @@ pipeline {
 
                         sh "aws ecs create-capacity-provider --name ${autoScalingGroupCapacityProviderName} --auto-scaling-group-provider autoScalingGroupArn=${autoScalingGroupArn},managedScaling={status=ENABLED,targetCapacity=60,minimumScalingStepSize=1,maximumScalingStepSize=1},managedTerminationProtection=ENABLED"
 
+                        sh "aws ecs put-cluster-capacity-providers --cluster ${ecsClusterName} --capacity-providers ${autoScalingGroupCapacityProviderName} --default-capacity-provider-strategy {capacityProvider:autoScalingGroupCapacityProviderName}"
+
                     }
                     catch(err){
                         echo ${err}
