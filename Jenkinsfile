@@ -39,7 +39,6 @@ pipeline {
                                     sh "auto scaling group instance id: ${item}"
                         }
 
-                        }
 
                     }
                     catch(err){
