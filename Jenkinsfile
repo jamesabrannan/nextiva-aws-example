@@ -31,7 +31,7 @@ pipeline {
                         jsonAsg.each { key, value ->
                         echo "Walked through key $key and value $value"
 
-                        def autoScalingGroupInstances = jsonAsg['AutoScalingGroups'] + jsonAsg['AutoScalingGroups[0].Instances']
+                        def autoScalingGroupInstances = AutoScalingGroups.AutoScalingGroups.Instances[0]]
                         echo autoScalingGroupInstances
 
                         }
