@@ -24,7 +24,8 @@ pipeline {
 
                         def autoScalingGroupName = sh script:"aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[2].OutputValue --output text --region ${AWS_REGION}".trim(), returnStdout:true
 
-                        sh "aws autoscaling update-auto-scaling-group --auto-scaling-group-name $autoScalingGroupName --new-instances-protected-from-scale-in"
+                        def res = sh script:"aws autoscaling update-auto-scaling-group --auto-scaling-group-name $autoScalingGroupName --new-instances-protected-from-scale-in", returnStdout:true;
+                        echo res
 
                     }
                     catch(err){
