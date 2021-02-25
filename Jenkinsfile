@@ -32,7 +32,7 @@ pipeline {
                         def autoScalingGroupArn = jsonAsg.AutoScalingGroups + jsonAsg.AutoScalingGroups[0].AutoScalingGroupARN
                         def autoScalingGroupCapacityProviderName = autoScalingGroupName + 'CapacityProvider';
 
-                        def autoScalingGroupInstances = props.AutoScalingGroups[0].Instances.InstanceId
+                        def autoScalingGroupInstances = jsonAsg.AutoScalingGroups[0].Instances.InstanceId
                             
                         autoScalingGroupInstances.each { item ->
                                     sh "auto scaling group instance id: ${item}"
