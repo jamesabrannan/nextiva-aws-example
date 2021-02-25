@@ -18,13 +18,17 @@ pipeline {
             steps {
                 script{
                     try {
-                        def invokeUrl = sh script:"aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[0].OutputValue --output text --region ${AWS_REGION}".trim(), returnStdout:true
+                        def invokeUrl = sh (script:"aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[0].OutputValue --output text --region ${AWS_REGION}", returnStdout:true).trim()
                        
-                        def ecsClusterName = sh script:"aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[1].OutputValue --output text --region ${AWS_REGION}".trim(), returnStdout:true
+                        def ecsClusterName = sh (script:"aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[1].OutputValue --output text --region ${AWS_REGION}", returnStdout:true).trim()
 
                         def autoScalingGroupName = sh (script:"aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[2].OutputValue --output text --region ${AWS_REGION}", returnStdout:true).trim()
 
-                        sh script:"aws autoscaling update-auto-scaling-group --auto-scaling-group-name $autoScalingGroupName --new-instances-protected-from-scale-in", returnStdout:true;
+                        sh script:"aws autoscaling update-auto-scaling-group --auto-scaling-group-name $autoScalingGroupName --new-instances-protected-from-scale-in", returnStdout:true
+
+                        def asg = sh (script:"aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name $autoScalingGroupName", returnStdout:true).trim()
+
+                        echo asg
 
                     }
                     catch(err){
