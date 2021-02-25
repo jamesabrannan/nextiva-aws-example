@@ -22,14 +22,11 @@ pipeline {
                        
                         def ecsClusterName = sh script:"aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[1].OutputValue --output text --region ${AWS_REGION}".trim(), returnStdout:true
 
-                        echo invokeUrl
-                        echo ecsClusterName
-
                         def autoScalingGroupName = sh script:"aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[2].OutputValue --output text --region ${AWS_REGION}".trim(), returnStdout:true
 
-                        echo autoScalingGroupName
+                        sh "echo $autoScalingGroupName"
 
-                        sh "aws autoscaling update-auto-scaling-group --auto-scaling-group-name '$autoScalingGroupName' --new-instances-protected-from-scale-in"
+                        //sh "aws autoscaling update-auto-scaling-group --auto-scaling-group-name '$autoScalingGroupName' --new-instances-protected-from-scale-in"
 
                     }
                     catch(err){
