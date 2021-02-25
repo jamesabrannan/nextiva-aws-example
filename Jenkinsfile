@@ -25,6 +25,9 @@ pipeline {
                         echo invokeUrl
                         echo ecsClusterName
 
+                        def autoScalingGroupName = sh script:"aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[2].OutputValue --output text --region ${AWS_REGION}", returnStdout:true
+
+                        echo autoScalingGroupName
 
                     }
                     catch(err){
