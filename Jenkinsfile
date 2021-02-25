@@ -28,12 +28,16 @@ pipeline {
 
                         def asg = sh (script:"aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name $autoScalingGroupName", returnStdout:true).trim()
                         def jsonAsg = readJSON text: asg 
-                        jsonAsg.each { key, value ->
-                        echo "Walked through key $key and value $value"
 
                         def autoScalingGroupInstances = jsonAsg.AutoScalingGroups + jsonAsg.AutoScalingGroups[0].Instances 
                         def autoScalingGroupArn = jsonAsg.AutoScalingGroups + jsonAsg.AutoScalingGroups[0].AutoScalingGroupARN
                         def autoScalingGroupCapacityProviderName = autoScalingGroupName + 'CapacityProvider';
+
+                        def autoScalingGroupInstances = props.AutoScalingGroups[0].Instances.InstanceId
+                            
+                        autoScalingGroupInstances.each { item ->
+                                    sh "auto scaling group instance id: ${item}"
+                        }
 
                         }
 
