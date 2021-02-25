@@ -29,18 +29,14 @@ pipeline {
                         def asg = sh (script:"aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name $autoScalingGroupName", returnStdout:true).trim()
                         def jsonAsg = readJSON text: asg 
 
-                        def autoScalingGroupArn = jsonAsg.AutoScalingGroups + jsonAsg.AutoScalingGroups[0].AutoScalingGroupARN
+                        def autoScalingGroupArn = jsonAsg.AutoScalingGroups[0].AutoScalingGroupARN
                         def autoScalingGroupCapacityProviderName = autoScalingGroupName + 'CapacityProvider';
 
                         def autoScalingGroupInstances = jsonAsg.AutoScalingGroups[0].Instances.InstanceId
                             
-                        autoScalingGroupInstances.each { item ->
-                                    echo "auto scaling group instance id: ${item}"
-                        }
-
                         sh "aws autoscaling set-instance-protection --auto-scaling-group-name ${autoScalingGroupName} --protected-from-scale-in --instance-ids ${autoScalingGroupInstances[0]} ${autoScalingGroupInstances[1]}"
 
-
+                        sh "aws ecs create-capacity-provider --name ${autoScalingGroupCapacityProviderName} --auto-scaling-group-provider autoScalingGroupArn=${autoScalingGroupArn},managedScaling={status=ENABLED,targetCapacity=60,minimumScalingStepSize=1,maximumScalingStepSize=1},managedTerminationProtection=ENABLED"
 
                     }
                     catch(err){
