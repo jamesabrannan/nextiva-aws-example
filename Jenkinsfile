@@ -32,7 +32,7 @@ pipeline {
                         echo "Walked through key $key and value $value"
 
                         def autoScalingGroupInstances = jsonAsg.AutoScalingGroups + jsonAsg.AutoScalingGroups[0].Instances 
-                        def autoScalingGroupArn = jsonAsg.AutoScalingGroups + asg.AutoScalingGroups[0].AutoScalingGroupARN
+                        def autoScalingGroupArn = jsonAsg.AutoScalingGroups + jsonAsg.AutoScalingGroups[0].AutoScalingGroupARN
 
                         }
 
