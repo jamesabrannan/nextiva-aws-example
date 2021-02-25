@@ -28,6 +28,7 @@ pipeline {
 
                         def asg = sh (script:"aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name $autoScalingGroupName", returnStdout:true).trim()
                         def jsonAsg = readJSON text: asg
+                        echo asg
 
                     }
                     catch(err){
