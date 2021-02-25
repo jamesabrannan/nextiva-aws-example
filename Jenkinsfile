@@ -35,7 +35,7 @@ pipeline {
                         def autoScalingGroupInstances = jsonAsg.AutoScalingGroups[0].Instances.InstanceId
                             
                         autoScalingGroupInstances.each { item ->
-                                    sh "auto scaling group instance id: ${item}"
+                                    echo "auto scaling group instance id: ${item}"
                         }
 
 
