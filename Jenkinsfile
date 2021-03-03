@@ -9,8 +9,8 @@ def EC2_AIM_IMAGE_NAME = "/aws/service/ecs/optimized-ami/amazon-linux-2/recommen
 def SAM_TEMPLATE = "${BASE_PATH}/templates/RecordingDemoCloudformationTemplate.yaml"
 def SAM_BUILD_TEMPLATE = "${BASE_PATH}/build/packaged.yaml"
 def STACK_NAME = "recording-demo-a123-stack"
-def DOCKER_AWS_CMD = "docker run -v ~/.aws:/root/.aws:${BASE_PATH} amazon/aws-cli"
-def DOCKER_AWS_SAM_CMD = "docker run -v ~/.aws:/root/.aws:${BASE_PATH} amazon/aws-sam-cli-build-image-python3.8 sam"
+def DOCKER_AWS_CMD = "docker run -v ~:/root/.aws amazon/aws-cli"
+def DOCKER_AWS_SAM_CMD = "docker run -v ~:/root/.aws amazon/aws-sam-cli-build-image-python3.8 sam"
 
 pipeline {
     agent any
