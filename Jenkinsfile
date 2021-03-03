@@ -79,7 +79,8 @@ pipeline {
                 script 
                 {
                    try {
-                        sh "${DOCKER_AWS_SAM_CMD} package --s3-bucket ${S3_BUCKET} --template-file ${SAM_TEMPLATE} --output-template-file ${SAM_BUILD_TEMPLATE} --region ${AWS_REGION}"
+                        def samTemplateCommand = "docker run -v ~/.aws:./templates/:./build/:/root/.aws amazon/aws-sam-cli-build-image-python3.8 sam""
+                        sh "${samTemplateCommand} package --s3-bucket ${S3_BUCKET} --template-file ${SAM_TEMPLATE} --output-template-file ${SAM_BUILD_TEMPLATE} --region ${AWS_REGION}"
                         echo '${DOCKER_AWS_SAM_CMD} template packaged'
                     }
                     catch(err){
