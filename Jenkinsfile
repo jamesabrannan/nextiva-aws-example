@@ -9,6 +9,7 @@ def SAM_TEMPLATE = "./templates/RecordingDemoCloudformationTemplate.yaml"
 def SAM_BUILD_TEMPLATE = "./build/packaged.yaml"
 def STACK_NAME = "recording-demo-a123-stack"
 def DOCKER_AWS_CMD = "docker run -v ~/.aws:/root/.aws amazon/aws-cli"
+def DOCKER_AWS_SAM_CMD = "docker run -v ~/.aws:/root/.aws amazon/aws-sam-cli-build-image-python3.8 sam"
 
 pipeline {
     agent any
@@ -25,6 +26,16 @@ pipeline {
                     }
                     catch(err){
                         echo 'could not get aws docker image'
+                        echo ${err}
+                        currentBuild.result = 'FAILURE'
+                    }
+                    // ensure that aws SAM cli docker image is installed
+                   try {
+                        sh "docker pull amazon/aws-cli"
+                        sh "${DOCKER_AWS_SAM_CMD} --version"
+                    }
+                    catch(err){
+                        echo 'could not get aws sam docker image'
                         echo ${err}
                         currentBuild.result = 'FAILURE'
                     }
