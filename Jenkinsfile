@@ -1,15 +1,16 @@
 def ECR_ARN = "743327341874.dkr.ecr.us-east-1.amazonaws.com/nextiva-aws-example-repository"
 def ECR_NAME = "nextiva-aws-example-repository"
+def BASE_PATH = "/var/lib/jenkins/workspace/aws-chime-demo"
 def AWS_REGION = "us-east-1"
 def DOCKER_TAG = "latest"
 def S3_BUCKET = "james-deploy-a123-bucket"
 def S3_BUCKET_ERROR = "An error occurred (404) when calling the HeadBucket operation: Not Found"
 def EC2_AIM_IMAGE_NAME = "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id"
-def SAM_TEMPLATE = "./templates/RecordingDemoCloudformationTemplate.yaml"
-def SAM_BUILD_TEMPLATE = "./build/packaged.yaml"
+def SAM_TEMPLATE = "${BASE_PATH}/templates/RecordingDemoCloudformationTemplate.yaml"
+def SAM_BUILD_TEMPLATE = "${BASE_PATH}/build/packaged.yaml"
 def STACK_NAME = "recording-demo-a123-stack"
-def DOCKER_AWS_CMD = "docker run -v ~/.aws:/root/.aws amazon/aws-cli"
-def DOCKER_AWS_SAM_CMD = "docker run -v ~/.aws:/root/.aws amazon/aws-sam-cli-build-image-python3.8 sam"
+def DOCKER_AWS_CMD = "docker run -v ~/.aws:/root/.aws amazon/aws-cli:${BASE_PATH}"
+def DOCKER_AWS_SAM_CMD = "docker run -v ~/.aws:/root/.aws:${BASE_PATH} amazon/aws-sam-cli-build-image-python3.8 sam"
 
 pipeline {
     agent any
@@ -79,8 +80,7 @@ pipeline {
                 script 
                 {
                    try {
-                        def samTemplateCommand = "docker run -v ~/.aws:./templates:.:/root/.aws amazon/aws-sam-cli-build-image-python3.8 sam"
-                        sh "${samTemplateCommand} package --s3-bucket ${S3_BUCKET} --template-file ${SAM_TEMPLATE} --output-template-file ${SAM_BUILD_TEMPLATE} --region ${AWS_REGION}"
+                        sh "${DOCKER_AWS_SAM_CMD} package --s3-bucket ${S3_BUCKET} --template-file ${SAM_TEMPLATE} --output-template-file ${SAM_BUILD_TEMPLATE} --region ${AWS_REGION}"
                         echo '${DOCKER_AWS_SAM_CMD} template packaged'
                     }
                     catch(err){
