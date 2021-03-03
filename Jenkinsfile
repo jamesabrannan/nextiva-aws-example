@@ -31,7 +31,7 @@ pipeline {
                     }
                     // ensure that aws SAM cli docker image is installed
                    try {
-                        sh "docker pull amazon/aws-cli"
+                        sh "docker pull amazon/aws-sam-cli-build-image-python3.8"
                         sh "${DOCKER_AWS_SAM_CMD} --version"
                     }
                     catch(err){
