@@ -74,5 +74,63 @@ pipeline {
                 }
             }
         }
+        stage('Deploy CloudFormation Resources'){
+            steps {
+                script 
+                {
+                   try {
+                        sh "${DOCKER_AWS_SAM_CMD} package --s3-bucket ${S3_BUCKET} --template-file ${SAM_TEMPLATE} --output-template-file ${SAM_BUILD_TEMPLATE} --region ${AWS_REGION}"
+                        echo '${DOCKER_AWS_SAM_CMD} template packaged'
+                    }
+                    catch(err){
+                        echo ${err}
+                        currentBuild.result = 'FAILURE'
+                    }
+                    try {
+                        sh "${DOCKER_AWS_SAM_CMD} deploy --template-file ./build/packaged.yaml --stack-name ${STACK_NAME} --parameter-overrides ECRDockerImageArn=${ECR_ARN} --capabilities CAPABILITY_IAM --region ${AWS_REGION} --no-fail-on-empty-changeset"
+                    }
+                    catch(err){
+                        echo ${err}
+                        echo '${DOCKER_AWS_SAM_CMD} deployment failed '
+                       currentBuild.result = 'FAILURE'
+                     }
+                }
+            }
+        }
+
+        stage('Configure AutoScaling Post CloudFormation'){
+            steps {
+                script{
+                    try {
+                        def invokeUrl = sh (script:"${DOCKER_AWS_CMD} cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[0].OutputValue --output text --region ${AWS_REGION}", returnStdout:true).trim()
+                       
+                        def ecsClusterName = sh (script:"${DOCKER_AWS_CMD} cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[1].OutputValue --output text --region ${AWS_REGION}", returnStdout:true).trim()
+
+                        def autoScalingGroupName = sh (script:"${DOCKER_AWS_CMD} cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[2].OutputValue --output text --region ${AWS_REGION}", returnStdout:true).trim()
+
+                        sh script:"${DOCKER_AWS_CMD} autoscaling update-auto-scaling-group --auto-scaling-group-name $autoScalingGroupName --new-instances-protected-from-scale-in", returnStdout:true
+
+                        def asg = sh (script:"${DOCKER_AWS_CMD} autoscaling describe-auto-scaling-groups --auto-scaling-group-name $autoScalingGroupName", returnStdout:true).trim()
+                        def jsonAsg = readJSON text: asg 
+
+                        def autoScalingGroupArn = jsonAsg.AutoScalingGroups[0].AutoScalingGroupARN
+                        def autoScalingGroupCapacityProviderName = autoScalingGroupName + 'CapacityProvider';
+
+                        def autoScalingGroupInstances = jsonAsg.AutoScalingGroups[0].Instances.InstanceId
+                            
+                        sh "${DOCKER_AWS_CMD} autoscaling set-instance-protection --auto-scaling-group-name ${autoScalingGroupName} --protected-from-scale-in --instance-ids ${autoScalingGroupInstances[0]} ${autoScalingGroupInstances[1]}"
+
+                        sh "${DOCKER_AWS_CMD} ecs create-capacity-provider --name ${autoScalingGroupCapacityProviderName} --auto-scaling-group-provider autoScalingGroupArn=${autoScalingGroupArn},managedScaling={status=ENABLED,targetCapacity=60,minimumScalingStepSize=1,maximumScalingStepSize=1},managedTerminationProtection=ENABLED"
+
+                        sh "${DOCKER_AWS_CMD} ecs put-cluster-capacity-providers --cluster ${ecsClusterName} --capacity-providers ${autoScalingGroupCapacityProviderName} --default-capacity-provider-strategy capacityProvider=${autoScalingGroupCapacityProviderName}"
+
+                    }
+                    catch(err){
+                        echo ${err}
+                        currentBuild.result = 'FAILURE'
+                    }
+                }
+            }
+
     }
 }
