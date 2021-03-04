@@ -93,7 +93,7 @@ pipeline {
                         currentBuild.result = 'FAILURE'
                     }
                     try {
-                        sh "${DOCKER_AWS_SAM_CMD} deploy --template-file ./build/packaged.yaml --stack-name ${STACK_NAME} --parameter-overrides ECRDockerImageArn=${ECR_ARN} --capabilities CAPABILITY_IAM --region ${AWS_REGION} --no-fail-on-empty-changeset"
+                        sh "${DOCKER_AWS_SAM_CMD} deploy --template-file ${SAM_BUILD_TEMPLATE} --stack-name ${STACK_NAME} --parameter-overrides ECRDockerImageArn=${ECR_ARN} --capabilities CAPABILITY_IAM --region ${AWS_REGION} --no-fail-on-empty-changeset"
                     }
                     catch(err){
                         echo ${err}
