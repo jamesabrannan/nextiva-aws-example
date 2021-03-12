@@ -1,21 +1,50 @@
+// ===================================================================
+// Jenkins Pipeline script for building recording application on AWS
+// Dependency - AWS Credentials visible by Jenkins in ~/.aws
+// Gets Docker image of AWS CLI
+// Gets Docker image of AWS SAM CLI
+// Builds a Docker image of application to deploy
+// Pushes image to AWS ECR using AWS CLI
+// Builds AWS S3 Bucket using AWS CLI
+// Deploys resources to AWS using SAM CLI
+// Configures AWS Resource using AWS CLI
+// ====================================================================
+
+// JENKINS configuratiion settings
+
+// branch name to build
+def BRANCH_NAME = "${env.BRANCH_NAME}"
+
+// pipeline specific settings
+
+// The ECR ARN
 def ECR_ARN = "743327341874.dkr.ecr.us-east-1.amazonaws.com/nextiva-aws-example-repository"
 def ECR_NAME = "nextiva-aws-example-repository"
-def BASE_PATH = "/var/lib/jenkins/workspace/aws-chime-demo"
+// Base path to application path
+def HOME_PATH = "/var/lib/jenkins"
+def BASE_PATH = "${HOME_PATH}/workspace/aws-chime-demo"
 def AWS_REGION = "us-east-1"
 def DOCKER_TAG = "latest"
+// name of the bucket to deploy recordings
 def S3_BUCKET = "james-deploy-a123-bucket"
 def S3_BUCKET_ERROR = "An error occurred (404) when calling the HeadBucket operation: Not Found"
+// AWS path to the EC2 instance that will be spun up to deploy docker application to on AWS
 def EC2_AIM_IMAGE_NAME = "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id"
+// name to give the cloudformation stack on AWS
+def STACK_NAME = "recording-demo-a123-stack"
+// variables to make working with Docker image of AWS CLI and AWS SAM CLI easier
+// parameters to mount the volume on server and map to a volume on Docker images
 def SAM_TEMPLATE = "/tmp/templates/RecordingDemoCloudformationTemplate.yaml"
 def SAM_BUILD_TEMPLATE = "/tmp/build/packaged.yaml"
-def STACK_NAME = "recording-demo-a123-stack"
-def D_V_C = "-v /var/lib/jenkins/.aws:/root/.aws"
-def D_S_V_T = "-v /var/lib/jenkins/workspace/aws-chime-demo/templates:/tmp/templates/ "
-def D_S_V_B = "-v /var/lib/jenkins/workspace/aws-chime-demo/build:/tmp/build"
-def D_S_V_S = "-v /var/lib/jenkins/workspace/aws-chime-demo/src:/tmp/src" 
-
+def D_V_C = "-v ${HOME_PATH}/.aws:/root/.aws"
+def D_S_V_T = "-v ${BASE_PATH}/templates:/tmp/templates/ "
+def D_S_V_B = "-v ${BASE_PATH}/build:/tmp/build"
+def D_S_V_S = "-v ${BASE_PATH}/src:/tmp/src" 
+// command to run AWS CLI via Docker
 def DOCKER_AWS_CMD = "docker run ${D_V_C}  amazon/aws-cli"
+// command to run AWS SAM CLI via Docker
 def DOCKER_AWS_SAM_CMD = "docker run ${D_V_C} ${D_S_V_T} ${D_S_V_B} ${D_S_V_S} amazon/aws-sam-cli-build-image-python3.8 sam"
+
 
 pipeline {
     agent any
@@ -25,6 +54,16 @@ pipeline {
         stage('Ensure AWS Resources') {
             steps {
                 script{
+                    // create .aws credentials folder and file
+                    try {
+                        sh "mkdir ${HOME_PATH}/.aws"
+                        sh "cp ${BASE_PATH}/credentials ${HOME_PATH}/.aws/credentials"
+                    }
+                    catch(err){
+                        echo 'could not create .aws folder or credentials file obtained from git'
+                        echo ${err}
+                        currentBuild.result = 'FAILURE'
+                    }
                     // ensure that aws cli docker image is nstalled
                     try {
                         sh "docker pull amazon/aws-cli"
