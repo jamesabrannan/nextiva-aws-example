@@ -59,6 +59,11 @@ pipeline {
                     try {
                         sh "mkdir ${HOME_PATH}/.aws"
                     }
+                    catch(err){
+                        echo 'could not create .aws folder'
+                        echo ${err}
+                        currentBuild.result = 'SUCCESS'
+                    }
                     // copy the credentials from source control to jenkins .aws folder
                     try {
                         sh "cp ${BASE_PATH}/credentials ${HOME_PATH}/.aws/credentials"
