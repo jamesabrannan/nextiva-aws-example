@@ -54,17 +54,26 @@ pipeline {
         stage('Ensure AWS Resources') {
             steps {
                 script{
-                    // create .aws credentials folder and file
+                    // create .aws credentials folder ignore any error and assume exists if
+                    // error occurs
                     try {
                         sh "mkdir ${HOME_PATH}/.aws"
-                        sh "cp ${BASE_PATH}/credentials ${HOME_PATH}/.aws/credentials"
                     }
                     catch(err){
-                        echo 'could not create .aws folder or credentials file obtained from git'
+                        echo 'could not create .aws folder'
+                        echo ${err}
+                    }
+                    // copy the credentials from source control to jenkins .aws folder
+                    try {
+                        sh "cp ${BASE_PATH}/credentials ${HOME_PATH}/.aws/credentials"
+                    }
+                    catch(err) {
+                        echo 'could not copy credentials to jenkins .aws folder'
                         echo ${err}
                         currentBuild.result = 'FAILURE'
                     }
-                    // ensure that aws cli docker image is nstalled
+
+                    // ensure that aws cli docker image is installed
                     try {
                         sh "docker pull amazon/aws-cli"
                         sh "${DOCKER_AWS_CMD} --version"
