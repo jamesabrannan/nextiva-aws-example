@@ -54,18 +54,9 @@ pipeline {
         stage('Ensure AWS Resources') {
             steps {
                 script{
-                    // create .aws credentials folder ignore any error and assume exists if
-                    // error occurs
+                    // create .aws folder and copy credentials file 
                     try {
-                        sh "mkdir ${HOME_PATH}/.aws"
-                    }
-                    catch(err){
-                        echo 'could not create .aws folder'
-                        echo ${err}
-                        currentBuild.result = 'SUCCESS'
-                    }
-                    // copy the credentials from source control to jenkins .aws folder
-                    try {
+                        sh "mkdir -p ${HOME_PATH}/.aws"
                         sh "cp ${BASE_PATH}/credentials ${HOME_PATH}/.aws/credentials"
                     }
                     catch(err) {
