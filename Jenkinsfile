@@ -22,7 +22,7 @@ def ECR_ARN = "743327341874.dkr.ecr.us-east-1.amazonaws.com/nextiva-aws-example-
 def ECR_NAME = "nextiva-aws-example-repository"
 // Base path to application path
 def HOME_PATH = "/var/lib/jenkins"
-def BASE_PATH = "${HOME_PATH}/workspace/aws-chime-demo"
+def BASE_PATH = "${HOME_PATH}/workspace/recording-demo-pipeline"
 def AWS_REGION = "us-east-1"
 def DOCKER_TAG = "latest"
 // name of the bucket to deploy recordings
