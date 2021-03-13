@@ -19,7 +19,7 @@ def BRANCH_NAME = "${env.BRANCH_NAME}"
 
 // The ECR ARN
 // NOTE: MUST HAVE CORRECT NAME FOR JENKINS SCRIPT OR BIGTIME ERRORS
-def JENKINS_WORKSPACE_SCRIPT_NAME = aws-demo
+def JENKINS_WORKSPACE_SCRIPT_NAME = "aws-demo"
 def ECR_ARN = "743327341874.dkr.ecr.us-east-1.amazonaws.com/nextiva-aws-example-repository"
 def ECR_NAME = "nextiva-aws-example-repository"
 // Base path to application path
