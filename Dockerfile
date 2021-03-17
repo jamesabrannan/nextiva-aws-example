@@ -17,5 +17,9 @@ WORKDIR /recording
 RUN /usr/bin/npm install && \
 	chmod +x /recording/run.sh && \
 	chmod +x /recording/record.js
+RUN /usr/bin/npm install winston && \
+	/usr/bin/npm install winston-daily-rotate-file && \
+	/usr/bin/npm install config && \
+	/usr/bin/npm install body-parser
 
 ENTRYPOINT ["/recording/run.sh"]

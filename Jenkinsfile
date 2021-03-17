@@ -1,4 +1,4 @@
-// ===================================================================
+// ==================================================================================================
 // Jenkins Pipeline script for building recording application on AWS
 // Dependency - AWS Credentials visible by Jenkins in ~/.aws
 // Gets Docker image of AWS CLI
@@ -8,7 +8,12 @@
 // Builds AWS S3 Bucket using AWS CLI
 // Deploys resources to AWS using SAM CLI
 // Configures AWS Resource using AWS CLI
-// ====================================================================
+// this is based/modified from AWS Sample project available at https://github.com/aws-samples/amazon-chime-sdk-recording-demo
+// note the sample is not jenkins related this is jenkins script based on the recording demo app by AWS
+// also note: is a hack, but I’ll be darned if I could figure out how to let docker run in jenkins. 
+// sudo chmod 777 /var/run/docker.sock, google for user setup instructions, but none worked for me without
+// this hack
+// =====================================================================================================
 
 // JENKINS configuratiion settings
 

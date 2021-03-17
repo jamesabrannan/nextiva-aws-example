@@ -12,6 +12,7 @@ SCREEN_RESOLUTION=${SCREEN_WIDTH}x${SCREEN_HEIGHT}
 COLOR_DEPTH=24
 X_SERVER_NUM=1
 S3_BUCKET_NAME=${RECORDING_ARTIFACTS_BUCKET}
+RECORD_FILE_NAME=${FILE_NAME}
 
 # Start PulseAudio server so Firefox will have somewhere to which to send audio
 pulseaudio -D --exit-idle-time=-1
@@ -68,5 +69,5 @@ firefox \
 sleep 0.5  # Ensure this has started before moving on
 xdotool mousemove 1 1 click 1  # Move mouse out of the way so it doesn't trigger the "pause" overlay on the video tile
 
-exec node /recording/record.js ${S3_BUCKET_NAME} ${SCREEN_WIDTH} ${SCREEN_HEIGHT}
+exec node /recording/record.js ${S3_BUCKET_NAME} ${SCREEN_WIDTH} ${SCREEN_HEIGHT} ${RECORD_FILE_NAME}
 
