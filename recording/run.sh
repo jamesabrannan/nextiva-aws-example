@@ -1,7 +1,11 @@
 #!/bin/bash
 
-# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2021 Nextiva, Inc. to Present.
+# All rights reserved.
+# Connect-Media-Recordings
+# Based on AWS Chime Meeting Recording Demo
+# Start pulseaudio, firefox with openH264 plugin
+# Start outputing browser content
 
 set -xeo pipefail
 
@@ -12,7 +16,8 @@ SCREEN_RESOLUTION=${SCREEN_WIDTH}x${SCREEN_HEIGHT}
 COLOR_DEPTH=24
 X_SERVER_NUM=1
 S3_BUCKET_NAME=${RECORDING_ARTIFACTS_BUCKET}
-RECORD_FILE_NAME=${FILE_NAME}
+CORPORATE_ACCOUNT_NUMBER=${CORPORATE_ACCOUNT_NUMBER}
+MEDIA_CALL_ID=${MEDIA_CALL_ID}
 
 # Start PulseAudio server so Firefox will have somewhere to which to send audio
 pulseaudio -D --exit-idle-time=-1
@@ -69,5 +74,4 @@ firefox \
 sleep 0.5  # Ensure this has started before moving on
 xdotool mousemove 1 1 click 1  # Move mouse out of the way so it doesn't trigger the "pause" overlay on the video tile
 
-exec node /recording/record.js ${S3_BUCKET_NAME} ${SCREEN_WIDTH} ${SCREEN_HEIGHT} ${RECORD_FILE_NAME}
-
+exec node /recording/record.js ${S3_BUCKET_NAME} ${CORPORATE_ACCOUNT_ID} ${MEDIA_CALL_ID} ${SCREEN_WIDTH} ${SCREEN_HEIGHT}

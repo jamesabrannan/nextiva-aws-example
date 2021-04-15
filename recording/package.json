@@ -1,15 +1,19 @@
 {
-  "name": "recording",
+  "name": "connect-media-recordings",
   "version": "1.0.0",
-  "description": "",
-  "main": "record.js",
+  "description": "Recording application for connect media recordings of Chime meetings.",
+  "main": "recording.js",
   "scripts": {
-    "start": "node record.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Nextiva",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.632.0"
+    "aws-sdk": "^2.874.0",
+    "config": "^3.3.6",
+    "s3-streamlogger": "^1.7.0",
+    "uuid": "^8.3.2",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.1"
   }
 }

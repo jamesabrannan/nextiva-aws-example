@@ -1,8 +1,17 @@
 {
     "port": 3001,
     "logConfig": {
+        "logLabel" : "connect-media-recordings",
         "logFolder": ".//logs//",
         "logFile": "connect-recording-%DATE%.log",
         "logLevel":"debug"
-       }
+    },
+    "ffmpeg-config":{
+        "logLevel" :"error"
+    },
+    "environment-config":{
+        "isLocal":true,
+        "tempRecordingFolder":".//recordings//",
+        "recordTimeoutDuration":"00:00:05"
     }
+}
