@@ -15,7 +15,8 @@
 
 // pipeline specific settings
 
-def JENKINS_WORKSPACE_SCRIPT_NAME = "connect-media-recordings_develop"
+// THIS MUST MATCH PROJECT NAME
+def JENKINS_WORKSPACE_SCRIPT_NAME = "test-aws-chime"
 // The ECR ARN
 def ECR_ARN = "743327341874.dkr.ecr.us-east-1.amazonaws.com/nextiva-aws-example-repository"
 def ECR_NAME = "nextiva-aws-example-repository"
