@@ -28,7 +28,7 @@ const config = require("config");
 var fs = require("fs");
 const { stderr, stdout } = require("process");
 
-const loggerFile = "[recording.js]";
+const loggerFile = "[record.js]";
 
 // folder to hold the temporary recordings
 // note: no need to delete the temporary recordings as the Docker instance

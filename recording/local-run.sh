@@ -24,4 +24,4 @@ CORPORATE_ACCOUNT_ID="134corpaccountid"
 # captures entire screen not firefox window only
 # example: node recording nextiva-connect-media-recordings 123abc 1024 768
 
-exec node recording.js ${S3_BUCKET_NAME} ${CORPORATE_ACCOUNT_ID} ${MEDIA_CALL_ID} ${SCREEN_WIDTH} ${SCREEN_HEIGHT}
+exec node record.js ${S3_BUCKET_NAME} ${CORPORATE_ACCOUNT_ID} ${MEDIA_CALL_ID} ${SCREEN_WIDTH} ${SCREEN_HEIGHT}

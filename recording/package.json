@@ -2,7 +2,7 @@
   "name": "connect-media-recordings",
   "version": "1.0.0",
   "description": "Recording application for connect media recordings of Chime meetings.",
-  "main": "recording.js",
+  "main": "record.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
