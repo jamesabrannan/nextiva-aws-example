@@ -49,6 +49,7 @@ def DOCKER_AWS_SAM_CMD = "docker run ${D_V_C} ${D_S_V_T} ${D_S_V_B} ${D_S_V_S} a
 
 // node('slave_golang') {
 pipeline {
+    agent any
     stages {
     stage('Ensure AWS Resources') 
     {
