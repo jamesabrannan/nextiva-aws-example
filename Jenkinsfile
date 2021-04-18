@@ -6,11 +6,12 @@
 // Builds a Docker image of application to deploy
 // Pushes image to AWS ECR using AWS CLI
 // Builds AWS S3 Bucket using AWS CLI
+// Builds AWS S3 Bucket for holding log file
 // Deploys resources to AWS using SAM CLI
 // Configures AWS Resource using AWS CLI
 // ====================================================================
 
-// JENKINS configuratiion settings
+// JENKINS configuration settings
 
 // pipeline specific settings
 
@@ -23,6 +24,8 @@ def HOME_PATH = "/home/jenkins"
 def BASE_PATH = "${HOME_PATH}/workspace/${JENKINS_WORKSPACE_SCRIPT_NAME}"
 def AWS_REGION = "us-east-1"
 def DOCKER_TAG = "latest"
+// name of the bucket to save recording logging files to
+def S3_BUCKET_LOG = "nextiva-connect-media-recordings-log"
 // name of the bucket to deploy recordings
 def S3_BUCKET = "nextiva-connect-media-recordings"
 def S3_BUCKET_ERROR = "An error occurred (404) when calling the HeadBucket operation: Not Found"
@@ -44,8 +47,9 @@ def DOCKER_AWS_CMD = "docker run ${D_V_C}  amazon/aws-cli"
 def DOCKER_AWS_SAM_CMD = "docker run ${D_V_C} ${D_S_V_T} ${D_S_V_B} ${D_S_V_S} amazon/aws-sam-cli-build-image-python3.8 sam"
 
 
-node('slave_golang') {
-
+// node('slave_golang') {
+pipeline {
+    stages {
     stage('Ensure AWS Resources') 
     {
         script
@@ -77,6 +81,45 @@ node('slave_golang') {
             }
             catch(err){
                 echo 'the required EC2 AIM not found'
+                currentBuild.result = 'FAILURE'
+            }
+        }
+    }
+    stage('Create-Docker-Deploy-ECR') 
+    {
+        script
+        {
+            // might get docker errors so need docker chmod 777 /var/run/docker.sock"
+            sh "${DOCKER_AWS_CMD} ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_ARN}"
+            sh "docker build -t  ${ECR_NAME} ."
+            sh "docker tag ${ECR_NAME}:${DOCKER_TAG} ${ECR_ARN}:${DOCKER_TAG}"
+            sh "docker push ${ECR_ARN}:${DOCKER_TAG}"
+        }
+    }
+    stage('Create S3 Bucket') 
+    {
+        script
+        {
+            try {
+                sh "${DOCKER_AWS_CMD} s3 mb s3://${S3_BUCKET} --region ${AWS_REGION}"
+                echo 'bucket created'
+            }
+            catch(err){
+                echo ${err}
+                currentBuild.result = 'FAILURE'
+            }
+        }
+    }
+    stage('Create S3 logging Bucket') 
+    {
+        script
+        {
+            try {
+                sh "${DOCKER_AWS_CMD} s3 mb s3://${S3_BUCKET_LOG} --region ${AWS_REGION}"
+                echo 'bucket created'
+            }
+            catch(err){
+                echo ${err}
                 currentBuild.result = 'FAILURE'
             }
         }
@@ -117,6 +160,15 @@ node('slave_golang') {
                 currentBuild.result = 'FAILURE'
             }
             try {
+                // add archiving rule to s3 bucket for logs for glacier archiving
+                sh "${DOCKER_AWS_CMD} s3api put-bucket-lifecycle --bucket ${S3_BUCKET_LOG} --lifecycle-configuration file://./s3config.json"
+            }
+            catch(err){
+                echo ${err}
+                echo '$"{S3_BUCKET_LOG} glacier configuration failed.'
+                currentBuild.result = 'FAILURE'
+            }
+            try {
                 def invokeUrl = sh (script:"${DOCKER_AWS_CMD} cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[0].OutputValue --output text --region ${AWS_REGION}", returnStdout:true).trim()
                        
                 def ecsClusterName = sh (script:"${DOCKER_AWS_CMD} cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[1].OutputValue --output text --region ${AWS_REGION}", returnStdout:true).trim()
@@ -146,4 +198,6 @@ node('slave_golang') {
             }
         }
     }
+    }
 }
+// }
