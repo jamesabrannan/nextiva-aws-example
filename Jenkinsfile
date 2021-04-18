@@ -52,6 +52,7 @@ pipeline {
     stages {
     stage('Ensure AWS Resources') 
     {
+    steps {
         script
         {
             // ensure that aws cli docker image is installed
@@ -85,8 +86,10 @@ pipeline {
             }
         }
     }
+    }
     stage('Create-Docker-Deploy-ECR') 
     {
+        steps {
         script
         {
             // might get docker errors so need docker chmod 777 /var/run/docker.sock"
@@ -95,9 +98,11 @@ pipeline {
             sh "docker tag ${ECR_NAME}:${DOCKER_TAG} ${ECR_ARN}:${DOCKER_TAG}"
             sh "docker push ${ECR_ARN}:${DOCKER_TAG}"
         }
+        }
     }
     stage('Create S3 Bucket') 
     {
+        steps {
         script
         {
             try {
@@ -109,9 +114,11 @@ pipeline {
                 currentBuild.result = 'FAILURE'
             }
         }
+        }
     }
     stage('Create S3 logging Bucket') 
     {
+        steps {
         script
         {
             try {
@@ -123,9 +130,11 @@ pipeline {
                 currentBuild.result = 'FAILURE'
             }
         }
+        }
     }
     stage('Deploy CloudFormation Resources')
     {
+        steps {
         script 
         {
             try {
@@ -145,9 +154,11 @@ pipeline {
                 currentBuild.result = 'FAILURE'
             }
         }
+        }
     }
     stage('Configure S3 Archiving and AutoScaling Post CloudFormation')
     {
+        steps {
         script
         {
             try {
@@ -197,6 +208,7 @@ pipeline {
                 currentBuild.result = 'FAILURE'
             }
         }
+    }
     }
     }
 }
