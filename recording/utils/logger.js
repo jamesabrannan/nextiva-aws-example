@@ -1,11 +1,12 @@
 /* Copyright (c) 2021 Nextiva, Inc. to Present.
  * All rights reserved.
  * Connect-Media-Recordings
- * Logger for Winston logging and rotating log file.
+ * Logger for Winston logging to S3 Stream
+ * uses the s3-streamlogger npm package
  */
 
 var winston = require("winston");
-require("winston-daily-rotate-file");
+var S3StreamLogger = require("s3-streamlogger").S3StreamLogger;
 const { format } = require("logform");
 const config = require("config");
 const { createLogger, transports } = require("winston");
@@ -27,15 +28,15 @@ const logformat = format.combine(
   )
 );
 
-// transport for writing to a winston rotating log file
+// transport for writing to S3 Stream, this must be a valid bucket and
+// must have the credentials in ~/.aws/credentials file
 
-const log_transport = new winston.transports.DailyRotateFile({
-  filename: config.get("logConfig.logFolder") + config.get("logConfig.logFile"),
-  datePattern: "YYYY-MM-DD-HH",
-  zippedArchive: true,
-  maxSize: "20m",
-  maxFiles: "14d",
-  prepend: true,
+var s3_stream = new S3StreamLogger({
+  bucket: config.get("logConfig.logBucketName"),
+});
+
+const log_transport = new winston.transports.Stream({
+  stream: s3_stream,
   format: winston.format.json(),
   level: config.get("logConfig.logLevel"),
 });

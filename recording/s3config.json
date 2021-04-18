@@ -1,0 +1,13 @@
+{
+    "Rules": [
+      {
+        "ID": "move-recordings-Glacier-ninety-days",
+        "Prefix": "archived/",
+        "Status": "Enabled",
+        "Transition": {
+          "Days": 0,
+          "StorageClass": "GLACIER"
+        }
+      }
+    ]
+  }
