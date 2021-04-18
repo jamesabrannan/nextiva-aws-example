@@ -21,7 +21,7 @@ def JENKINS_WORKSPACE_SCRIPT_NAME = "test-aws-chime"
 def ECR_ARN = "743327341874.dkr.ecr.us-east-1.amazonaws.com/nextiva-aws-example-repository"
 def ECR_NAME = "nextiva-aws-example-repository"
 // Base path to application path
-def HOME_PATH = "/home/jenkins"
+def HOME_PATH = "/var/lib/jenkins"
 def BASE_PATH = "${HOME_PATH}/workspace/${JENKINS_WORKSPACE_SCRIPT_NAME}"
 def AWS_REGION = "us-east-1"
 def DOCKER_TAG = "latest"
