@@ -46,13 +46,14 @@ def STACK_NAME = "recording-demo-a123-stack"
 // parameters to mount the volume on server and map to a volume on Docker images
 def SAM_TEMPLATE = "/tmp/templates/RecordingDemoCloudformationTemplate.yaml"
 def SAM_BUILD_TEMPLATE = "/tmp/build/packaged.yaml"
-def S3_CONFIG = "/tmp/templates/s3config.json"
+def S3_CONFIG = "/tmp/s3-config/s3config.json"
+def S3_V = "-v ${HOME_RUN_PATH}/s3-config:/tmp/s3-config"
 def D_V_C = "-v ${HOME_PATH}/.aws:/root/.aws"
 def D_S_V_T = "-v ${BASE_PATH}/templates:/tmp/templates/"
 def D_S_V_B = "-v ${BASE_PATH}/build:/tmp/build"
 def D_S_V_S = "-v ${BASE_PATH}/src:/tmp/src"
 // command to run AWS CLI via Docker
-def DOCKER_AWS_CMD = "docker run ${D_V_C} amazon/aws-cli"
+def DOCKER_AWS_CMD = "docker run ${D_V_C} ${S3_V} amazon/aws-cli"
 // command to run AWS SAM CLI via Docker
 def DOCKER_AWS_SAM_CMD = "docker run ${D_V_C} ${D_S_V_T} ${D_S_V_B} ${D_S_V_S} amazon/aws-sam-cli-build-image-python3.8 sam"
 
