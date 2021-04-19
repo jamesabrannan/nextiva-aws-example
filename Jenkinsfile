@@ -191,24 +191,6 @@ pipeline {
         script
         {
             try {
-                // add archiving rule to s3 bucket for glacier archiving
-                sh "${DOCKER_AWS_CMD} s3api put-bucket-lifecycle --bucket ${S3_BUCKET} --lifecycle-configuration file://${S3_CONFIG}"
-            }
-            catch(err){
-                echo ${err}
-                echo '$"{S3_BUCKET} glacier configuration failed.'
-                currentBuild.result = 'FAILURE'
-            }
-            try {
-                // add archiving rule to s3 bucket for logs for glacier archiving
-                sh "${DOCKER_AWS_CMD} s3api put-bucket-lifecycle --bucket ${S3_BUCKET_LOG} --lifecycle-configuration file://${S3_CONFIG}"
-            }
-            catch(err){
-                echo ${err}
-                echo '$"{S3_BUCKET_LOG} glacier configuration failed.'
-                currentBuild.result = 'FAILURE'
-            }
-            try {
                 def invokeUrl = sh (script:"${DOCKER_AWS_CMD} cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[0].OutputValue --output text --region ${AWS_REGION}", returnStdout:true).trim()
                        
                 def ecsClusterName = sh (script:"${DOCKER_AWS_CMD} cloudformation describe-stacks --stack-name ${STACK_NAME} --query Stacks[0].Outputs[1].OutputValue --output text --region ${AWS_REGION}", returnStdout:true).trim()
