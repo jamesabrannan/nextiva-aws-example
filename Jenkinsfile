@@ -55,7 +55,7 @@ def D_S_V_S = "-v ${BASE_PATH}/src:/tmp/src"
 // command to run AWS CLI via Docker
 def DOCKER_AWS_CMD = "docker run ${D_V_C} ${S3_V} amazon/aws-cli"
 // command to run AWS SAM CLI via Docker
-def DOCKER_AWS_SAM_CMD = "docker run ${D_V_C} ${D_S_V_T} ${D_S_V_B} ${D_S_V_S} amazon/aws-sam-cli-build-image-python3.8 sam"
+def DOCKER_AWS_SAM_CMD = "docker run ${D_V_C} ${D_S_V_T} ${D_S_V_B} ${D_S_V_S} ${S3_V} amazon/aws-sam-cli-build-image-python3.8 sam"
 
 
 // node('slave_golang') {
