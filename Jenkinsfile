@@ -11,6 +11,14 @@
 // Configures AWS Resource using AWS CLI
 // ====================================================================
 
+// Troubleshooting:
+// 1. first the home path to jenkins might not match path jenkins is using for 
+// workspace. HOME_PATH HOME_RUN_PATH might be different. if they are, be certain
+// to specify that.
+// 2. ensure that the .aws folder with credentials exists for jenkins home
+// 3. docker might not work. the only fix I found was this workaround: chmod 777 /var/run/docker.sock
+
+
 // JENKINS configuration settings
 
 // pipeline specific settings
@@ -165,7 +173,7 @@ pipeline {
         {
             try {
                 // add archiving rule to s3 bucket for glacier archiving
-                sh "${DOCKER_AWS_CMD} s3api put-bucket-lifecycle --bucket ${S3_BUCKET} --lifecycle-configuration file://./s3config.json"
+                sh "${DOCKER_AWS_CMD} s3api put-bucket-lifecycle --bucket ${S3_BUCKET} --lifecycle-configuration file://${BASE_PATH}/s3config.json"
             }
             catch(err){
                 echo ${err}
@@ -174,7 +182,7 @@ pipeline {
             }
             try {
                 // add archiving rule to s3 bucket for logs for glacier archiving
-                sh "${DOCKER_AWS_CMD} s3api put-bucket-lifecycle --bucket ${S3_BUCKET_LOG} --lifecycle-configuration file://./s3config.json"
+                sh "${DOCKER_AWS_CMD} s3api put-bucket-lifecycle --bucket ${S3_BUCKET_LOG} --lifecycle-configuration file://${BASE_PATH}/s3config.json"
             }
             catch(err){
                 echo ${err}
