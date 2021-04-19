@@ -164,10 +164,28 @@ pipeline {
                 echo '${DOCKER_AWS_SAM_CMD} deployment failed '
                 currentBuild.result = 'FAILURE'
             }
+            try {
+                // add archiving rule to s3 bucket for glacier archiving
+                sh "${DOCKER_AWS_CMD} s3api put-bucket-lifecycle --bucket ${S3_BUCKET} --lifecycle-configuration file://${S3_CONFIG}"
+            }
+            catch(err){
+                echo ${err}
+                echo '$"{S3_BUCKET} glacier configuration failed.'
+                currentBuild.result = 'FAILURE'
+            }
+            try {
+                // add archiving rule to s3 bucket for logs for glacier archiving
+                sh "${DOCKER_AWS_CMD} s3api put-bucket-lifecycle --bucket ${S3_BUCKET_LOG} --lifecycle-configuration file://${S3_CONFIG}"
+            }
+            catch(err){
+                echo ${err}
+                echo '$"{S3_BUCKET_LOG} glacier configuration failed.'
+                currentBuild.result = 'FAILURE'
+            }
         }
         }
     }
-    stage('Configure S3 Archiving and AutoScaling Post CloudFormation')
+    stage('Configure AutoScaling Post CloudFormation')
     {
         steps {
         script
