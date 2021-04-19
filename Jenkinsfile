@@ -174,7 +174,7 @@ pipeline {
         {
             try {
                 // add archiving rule to s3 bucket for glacier archiving
-                sh "${DOCKER_AWS_CMD} s3api put-bucket-lifecycle --bucket ${S3_BUCKET} --lifecycle-configuration ${S3_CONFIG}"
+                sh "${DOCKER_AWS_CMD} s3api put-bucket-lifecycle --bucket ${S3_BUCKET} --lifecycle-configuration file://${S3_CONFIG}"
             }
             catch(err){
                 echo ${err}
@@ -183,7 +183,7 @@ pipeline {
             }
             try {
                 // add archiving rule to s3 bucket for logs for glacier archiving
-                sh "${DOCKER_AWS_CMD} s3api put-bucket-lifecycle --bucket ${S3_BUCKET_LOG} --lifecycle-configuration ${S3_CONFIG}"
+                sh "${DOCKER_AWS_CMD} s3api put-bucket-lifecycle --bucket ${S3_BUCKET_LOG} --lifecycle-configuration file://${S3_CONFIG}"
             }
             catch(err){
                 echo ${err}
