@@ -52,7 +52,7 @@ def D_S_V_T = "-v ${BASE_PATH}/templates:/tmp/templates/ "
 def D_S_V_B = "-v ${BASE_PATH}/build:/tmp/build"
 def D_S_V_S = "-v ${BASE_PATH}/src:/tmp/src"
 // command to run AWS CLI via Docker
-def DOCKER_AWS_CMD = "docker run ${D_V_C} ${D_S_B}  amazon/aws-cli"
+def DOCKER_AWS_CMD = "docker run ${D_V_C} amazon/aws-cli"
 // command to run AWS SAM CLI via Docker
 def DOCKER_AWS_SAM_CMD = "docker run ${D_V_C} ${D_S_V_T} ${D_S_V_B} ${D_S_V_S} amazon/aws-sam-cli-build-image-python3.8 sam"
 
