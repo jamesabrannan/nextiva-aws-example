@@ -46,7 +46,7 @@ def STACK_NAME = "recording-demo-a123-stack"
 // parameters to mount the volume on server and map to a volume on Docker images
 def SAM_TEMPLATE = "/tmp/templates/RecordingDemoCloudformationTemplate.yaml"
 def SAM_BUILD_TEMPLATE = "/tmp/build/packaged.yaml"
-def S3_CONFIG = "/tmp/s3-config/s3config.json"
+def S3_CONFIG_FILE = "/tmp/s3-config/s3config.json"
 def S3_V = "-v ${BASE_PATH}/s3-config:/tmp/s3-config"
 def D_V_C = "-v ${HOME_PATH}/.aws:/root/.aws"
 def D_S_V_T = "-v ${BASE_PATH}/templates:/tmp/templates/"
@@ -151,7 +151,7 @@ pipeline {
             {
             try {
                 // add archiving rule to s3 bucket for glacier archiving
-                sh "${DOCKER_AWS_CMD} s3api put-bucket-lifecycle --bucket ${S3_BUCKET} --lifecycle-configuration file://${S3_CONFIG}"
+                sh "${DOCKER_AWS_CMD} s3api put-bucket-lifecycle --bucket ${S3_BUCKET} --lifecycle-configuration file://${S3_CONFIG_FILE}"
             }
             catch(err){
                 echo ${err}
@@ -160,7 +160,7 @@ pipeline {
             }
             try {
                 // add archiving rule to s3 bucket for logs for glacier archiving
-                sh "${DOCKER_AWS_CMD} s3api put-bucket-lifecycle --bucket ${S3_BUCKET_LOG} --lifecycle-configuration file://${S3_CONFIG}"
+                sh "${DOCKER_AWS_CMD} s3api put-bucket-lifecycle --bucket ${S3_BUCKET_LOG} --lifecycle-configuration file://${S3_CONFIG_FILE}"
             }
             catch(err){
                 echo ${err}
