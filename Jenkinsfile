@@ -119,7 +119,7 @@ pipeline {
         script
         {
             try {
-                sh "${DOCKER_AWS_CMD} s3 mb s3://${S3_BUCKET} --region ${AWS_REGION} -acl private"
+                sh "${DOCKER_AWS_CMD} s3 mb s3://${S3_BUCKET} --region ${AWS_REGION} --acl private"
                 echo 'bucket created'
             }
             catch(err){
