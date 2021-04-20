@@ -155,6 +155,15 @@ pipeline {
                 echo '$"{S3_BUCKET_LOG} glacier configuration failed.'
                 currentBuild.result = 'FAILURE'
             }
+            try {
+                // block public access
+                sh "${DOCKER_AWS_CMD} s3api put-public-access-block --bucket ${S3_BUCKET} --public-access-block-configuration 'BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true'"
+            }
+            catch(err){
+                echo ${err}
+                echo '$"{S3_BUCKET} glacier configuration failed.'
+                currentBuild.result = 'FAILURE'
+            }
             }
         }
     }
