@@ -17,7 +17,8 @@
 // to specify that.
 // 2. ensure that the .aws folder with credentials exists for jenkins home
 // 3. docker might not work. the only fix I found was this workaround: chmod 777 /var/run/docker.sock
-
+// 4. you must have Pipeline Utility Steps plugin installed in jenkins, as relies on json in variables, see near
+// line 211
 
 // JENKINS configuration settings
 
@@ -118,7 +119,7 @@ pipeline {
         script
         {
             try {
-                sh "${DOCKER_AWS_CMD} s3 mb s3://${S3_BUCKET} --region ${AWS_REGION}"
+                sh "${DOCKER_AWS_CMD} s3 mb s3://${S3_BUCKET} --region ${AWS_REGION} -acl private"
                 echo 'bucket created'
             }
             catch(err){
@@ -134,7 +135,7 @@ pipeline {
         script
         {
             try {
-                sh "${DOCKER_AWS_CMD} s3 mb s3://${S3_BUCKET_LOG} --region ${AWS_REGION}"
+                sh "${DOCKER_AWS_CMD} s3 mb s3://${S3_BUCKET_LOG} --region ${AWS_REGION} --acl private"
                 echo 'bucket created'
             }
             catch(err){
