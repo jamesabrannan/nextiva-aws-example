@@ -39,7 +39,7 @@ exports.handler = function (event, context, callback) {
   let meetingURL = "";
   let taskId = "";
   let recordingAction = "";
-  let mediaCalId = "";
+  let mediaCallId = "";
   let corpAcctNum = "";
 
   console.log(event);
@@ -76,7 +76,7 @@ exports.handler = function (event, context, callback) {
           callback,
           meetingURL,
           corpAcctNum,
-          mediaCalId
+          mediaCallId
         );
       } else {
         responseBody = {
