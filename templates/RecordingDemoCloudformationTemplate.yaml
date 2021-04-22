@@ -75,7 +75,8 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
         AccessControl: BucketOwnerFullControl
-        BucketName: nextiva-connect-media-recordings
+        BucketName:
+          Fn::Join: ['', ['chime-meeting-sdk-', {Ref: 'AWS::AccountId'}, '-', {Ref: 'AWS::Region'}, '-recordings']]
   RecordingDemoLambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
