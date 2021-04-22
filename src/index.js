@@ -69,7 +69,10 @@ exports.handler = function (event, context, callback) {
           "Corporate Account Number: " + event.queryStringParameters.corpAcctNum
         );
         corpAcctNum = event.queryStringParameters.corpAcctNum;
-        console.log("Media call Id: " + event.queryStringParameters.mediaCalId);
+        console.log(
+          "Media call Id: " + event.queryStringParameters.mediaCallId
+        );
+        mediaCallId = event.queryStringParameters.mediaCallId;
         return startRecording(
           event,
           context,
