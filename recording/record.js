@@ -51,8 +51,8 @@ logger.log(
   `${loggerFile} BUCKET_NAME: ${BUCKET_NAME} CORP_ACCNT_ID: ${CORP_ACCNT_ID} MEDIA_CALL_ID: ${MEDIA_CALL_ID}`
 );
 
-const BROWSER_SCREEN_WIDTH = args[2];
-const BROWSER_SCREEN_HEIGHT = args[3];
+const BROWSER_SCREEN_WIDTH = args[3];
+const BROWSER_SCREEN_HEIGHT = args[4];
 
 // create the file to upload to S3 bucket
 // format: year/month/day/hour/media-call-id
