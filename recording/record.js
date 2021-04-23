@@ -137,6 +137,8 @@ if (config.get("environment-config.isLocal") == true) {
     "-hide_banner",
     "-loglevel",
     `${FFMPEG_LOG_LEVEL}`,
+    "-t",
+    `${timeout}`,
     "-nostdin",
     "-s",
     `${BROWSER_SCREEN_WIDTH}x${BROWSER_SCREEN_HEIGHT}`,
@@ -158,8 +160,6 @@ if (config.get("environment-config.isLocal") == true) {
     "2",
     "-i",
     "default",
-    "-t",
-    `${timeout}`,
     // codec video with libx264
     "-c:v",
     "libx264",
