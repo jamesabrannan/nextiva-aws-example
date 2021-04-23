@@ -103,16 +103,15 @@ var recordingName = `${recordingsFolder}/${MEDIA_CALL_ID}.mp4`;
 // -i: if debug, then assumption is main display output and microphone input
 // -t: the timeout in duration before ending recording
 
+var timeout = config.get("environment-config.recordTimeoutDuration");
+logger.log("debug", `${loggerFile}: timeout for video: ${timeout}`);
+
 if (config.get("environment-config.isLocal") == true) {
   // debug settings for personal OSX computer's settings, see note above
   // to determine these values
 
   var INPUT_SCREEN_CAPTURE = "1";
   var INPUT_SOUND_CAPTURE = "0";
-
-  var timeout = config.get("environment-config.recordTimeoutDuration");
-
-  logger.log("debug", `${loggerFile}: timeout for video: ${timeout}`);
 
   logger.log("debug", `${loggerFile}  in debug environment for ffmpeg`);
   transcodeStreamToOutput = spawn("ffmpeg", [
