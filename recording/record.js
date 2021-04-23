@@ -198,9 +198,6 @@ if (config.get("environment-config.isLocal") == true) {
     // adjust fragmentation to prevent seeking(resolve issue: muxer does not support non seekable output)
     "-movflags",
     "frag_keyframe+empty_moov",
-    // set output format to mp4 and output file to stdout
-    "-f",
-    "mp4",
     `${recordingName}`,
   ]);
 }
