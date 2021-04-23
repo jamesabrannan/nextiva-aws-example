@@ -39,12 +39,19 @@ var recordingsFolder = config.get("environment-config.tempRecordingFolder");
 // get the bucket name and height and width of screen from
 // shell script
 
+const origArgs = process.argv;
+
+logger.log(
+  "debug",
+  `${loggerFile}: original arguments before slicing: origArgs`
+);
+
 const args = process.argv.slice(2);
 const BUCKET_NAME = args[0];
 const CORP_ACCNT_ID = args[1];
 const MEDIA_CALL_ID = args[2];
 
-console.log("args: ", args);
+logger.log("debug", `args: args`);
 
 logger.log(
   "info",
