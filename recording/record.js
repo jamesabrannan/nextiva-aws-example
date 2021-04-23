@@ -43,7 +43,7 @@ const origArgs = process.argv;
 
 logger.log(
   "debug",
-  `${loggerFile}: original arguments before slicing: origArgs`
+  `${loggerFile}: original arguments before slicing: ${origArgs}`
 );
 
 const args = process.argv.slice(2);
@@ -51,7 +51,7 @@ const BUCKET_NAME = args[0];
 const CORP_ACCNT_ID = args[1];
 const MEDIA_CALL_ID = args[2];
 
-logger.log("debug", `args: args`);
+logger.log("debug", `arguments: ${args}`);
 
 logger.log(
   "info",
