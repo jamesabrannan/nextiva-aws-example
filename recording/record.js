@@ -112,6 +112,8 @@ if (config.get("environment-config.isLocal") == true) {
 
   var timeout = config.get("environment-config.recordTimeoutDuration");
 
+  logger.log("debug", `${loggerFile}: timeout for video: ${timeout}`);
+
   logger.log("debug", `${loggerFile}  in debug environment for ffmpeg`);
   transcodeStreamToOutput = spawn("ffmpeg", [
     "-f",
@@ -133,6 +135,10 @@ if (config.get("environment-config.isLocal") == true) {
     `${recordingName}`,
   ]);
 } else {
+  logger.log(
+    "debug",
+    `${loggerFile}: running ffmpeg and not in debug environment.`
+  );
   transcodeStreamToOutput = spawn("ffmpeg", [
     "-hide_banner",
     "-loglevel",
