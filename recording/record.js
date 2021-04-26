@@ -25,10 +25,3 @@ const AUDIO_BITRATE = "160k";
 const AUDIO_SAMPLERATE = 44100;
 const AUDIO_CHANNELS = 2;
 const DISPLAY = process.env.DISPLAY;
-
-const loggerFile = "[record.js]";
-
-logger.log(
-  "debug",
-  `${loggerFile}: original arguments before slicing: ${origArgs}`
-);
