@@ -1,5 +1,5 @@
 BASE_PATH := $(shell pwd)
-HOME_PATH := $$(HOME)
+HOME_PATH := /home/jenkins
 AWS_REGION := us-east-1
 
 #binds credentials path to Docker volume, as cli runs as Docker image
