@@ -3,7 +3,7 @@ HOME_PATH := $$(HOME)
 AWS_REGION := us-east-1
 
 #binds credentials path to Docker volume, as cli runs as Docker image
-AWS_CREDS_BIND := -v $(BASE_PATH)/aws:/root/.aws
+AWS_CREDS_BIND := -v $(HOME_PATH)/aws:/root/.aws
 
 #binds the path to bucket configuration to Docker volume
 S3_BUCKET_CFG_BIND := -v $(BASE_PATH)/recording/s3-config:/tmp/s3-config/
