@@ -11,12 +11,14 @@ pipeline {
                     try {
                         sh "make init"
                     }
-            catch(err){
-                echo 'could not run makefile'
-                echo ${err}
-                currentBuild.result = 'FAILURE'
-            }
+                    catch(err){
+                        echo 'could not run makefile'
+                        echo ${err}
+                        currentBuild.result = 'FAILURE'
+                    }
                 }
+            }
         }
     }
+}
   
