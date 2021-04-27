@@ -10,7 +10,7 @@ pipeline {
                 script
                 {
                     try {
-                        sh "make ${STAGE}"
+                        sh "make ${MAKE_STAGE}"
                     }
                     catch(err){
                         echo 'could not run makefile'
