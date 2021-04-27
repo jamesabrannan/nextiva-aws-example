@@ -1,5 +1,5 @@
 def JENKINS_WORKSPACE_SCRIPT_NAME = "test-aws-chime"
-def MAKE_STAGE = "init"
+def MAKE_STAGE = ""
 
 pipeline {
     agent any
