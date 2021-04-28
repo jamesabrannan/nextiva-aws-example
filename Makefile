@@ -32,7 +32,7 @@ get_ecr_repository:
 	docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr describe-repositories --repository-names $(ECR_REPOSITORY_NAME)
 
 create_ecr_repository:
-	docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr create-repository --region $(AWS_REGION) --repository-name $(ECR_REPOSITORY_NAME) || true
+	docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr create-repository --region $(AWS_REGION) --repository-name $(ECR_REPOSITORY_NAME) 2>/dev/null
 
 create_configure_buckets:
 	docker run $(AWS_CREDS_BIND) amazon/aws-cli s3 mb s3://$(S3_BUCKET) --region $(AWS_REGION)
