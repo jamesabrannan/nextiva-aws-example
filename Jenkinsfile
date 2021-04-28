@@ -27,13 +27,19 @@ pipeline {
                 {
                     try {
                         sh "make create_ecr_repository"
+                    }
+                    catch(err){
+                        echo ${err}
+                        currentBuild.result = 'SUCCESS'
+                    }
+                    try {
                         def ecr_created = sh(script:"make get_ecr_repository", returnStdout:true).trim()
                         def jsonAsg = readJSON text: asg 
                         def arn = jsonAsg.repositories[0].repositoryArn
                     }
                     catch(err){
-                        echo 'could not run makefile create_ecr_repository task'
-                        echo ${err}
+                        echo 'could not obtain ecr repository'
+                        echo $(err)
                         currentBuild.result = 'FAILURE'
                     }
                 }
