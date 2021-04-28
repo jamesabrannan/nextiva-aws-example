@@ -1,9 +1,10 @@
 def JENKINS_WORKSPACE_SCRIPT_NAME = "test-aws-chime"
+def ECR_REPOSITORY_NAME = "test-chime-recording-repository"
 
 pipeline {
     agent any
     stages {
-        stage('Initialize Project') 
+        stage('Ensure AWS Resources') 
         {
             steps {
                 script
@@ -19,19 +20,30 @@ pipeline {
                 }
             }
         }
-        stage('Create Resources') 
+        stage('Create Elastic Container Registry') 
         {
             steps {
                 script
                 {
                     try {
                         sh "make create_ecr_repository"
+                        def ecr_created = sh(script:"make get_ecr_repository", returnStdout:true).trim()
+                        def jsonAsg = readJSON text: asg 
+                        def arn = jsonAsg.repositories[0].repositoryArn
                     }
                     catch(err){
                         echo 'could not run makefile create_ecr_repository task'
                         echo ${err}
                         currentBuild.result = 'FAILURE'
                     }
+                }
+            }
+        }
+        stage('Create and Configure S3 Buckets') 
+        {
+            steps {
+                script
+                {
                     try {
                         sh "make create_configure_buckets"
                     }
@@ -43,6 +55,15 @@ pipeline {
                 }
             }
         }
+        stage('Create and Deploy Docker ECR')
+        {
+            steps {
+                script
+                {
+                    echo "nothing yet"
+                }
+            }
+        }       
     }
 }
   

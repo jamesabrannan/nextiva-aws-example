@@ -28,9 +28,19 @@ init:
 	docker pull amazon/aws-sam-cli-build-image-python3.8
 	docker run $(AWS_CREDS_BIND) $(S3_BUCKET_CFG_BIND) $(TEMPLATE_BIND) $(BUILD_BIND) $(SRC_BIND) amazon/aws-sam-cli-build-image-python3.8 sam --version
 
+get_ecr_repository:
+	docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr describe-repositories --repository-names $(ECR_REPOSITORY_NAME)
+
 create_ecr_repository:
-	docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr create-repository --region $(AWS_REGION) --repository-name $(ECR_REPOSITORY_NAME)
+	docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr create-repository --region $(AWS_REGION) --repository-name $(ECR_REPOSITORY_NAME) || true
 
 create_configure_buckets:
 	docker run $(AWS_CREDS_BIND) amazon/aws-cli s3 mb s3://$(S3_BUCKET) --region $(AWS_REGION)
 	docker run $(AWS_CREDS_BIND) amazon/aws-cli s3 mb s3://$(S3_LOG_BUCKET) --region $(AWS_REGION)
+
+build_image:
+	docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(ECR_ARN)
+	docker build -t  $(ECR_NAME) .
+	docker tag $(ECR_NAME):$(DOCKER_TAG) $(ECR_ARN):$(DOCKER_TAG)
+	docker push $(ECR_ARN):$(DOCKER_TAG)
+	
