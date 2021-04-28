@@ -30,7 +30,6 @@ pipeline {
                     }
                     catch(err){
                         echo ${err}
-                        currentBuild.result = 'SUCCESS'
                     }
                     try {
                         def ecr_created = sh(script:"make get_ecr_repository", returnStdout:true).trim()
