@@ -32,8 +32,8 @@ pipeline {
                         echo ${err}
                     }
                     try {
-                        def ecr_created = sh(script:"make get_ecr_repository", returnStdout:true).trim()
-                        def jsonAsg = readJSON text: ecr_created 
+                        def ecr_created = sh "make get_ecr_repository"
+                        def jsonAsg = readJSON text: ecr_created.trim() 
                         def arn = jsonAsg.repositories[0].repositoryArn
                     }
                     catch(err){
