@@ -11,7 +11,7 @@ pipeline {
                 {
                     try {
                         def test = sh script:"echo damn", returnStdout:true
-                        echo 'damn'
+                        echo "test: ${test}"
                         //sh "make init"
                     }
                     catch(err){
