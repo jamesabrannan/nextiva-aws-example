@@ -10,6 +10,8 @@ pipeline {
                 script
                 {
                     try {
+                        def test = (script:"make test", returnStdout:true).trim()
+                        echo ${test}
                         sh "make init"
                     }
                     catch(err){
@@ -33,9 +35,9 @@ pipeline {
                     }
                     try {
                         def ecr_created = sh "make get_ecr_repository"
-                        echo $ecr_created
-                        def jsonAsg = readJSON text: ecr_created 
-                        def arn = jsonAsg.repositories[0].repositoryArn
+                        //echo $ecr_created
+                        //def jsonAsg = readJSON text: ecr_created 
+                        //def arn = jsonAsg.repositories[0].repositoryArn
                     }
                     catch(err){
                         echo 'could not obtain ecr repository'
