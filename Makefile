@@ -20,6 +20,9 @@ S3_BUCKET := nextiva-connect-media-recordings
 #the name of the bucket to hold log
 S3_LOG_BUCKET := nextiva-connect-media-recordings-log
 
+test:
+	echo 'test' 2>&1
+
 init:
 	$(info pulling amazon/aws-cli)
 	docker pull amazon/aws-cli
@@ -29,10 +32,10 @@ init:
 	docker run $(AWS_CREDS_BIND) $(S3_BUCKET_CFG_BIND) $(TEMPLATE_BIND) $(BUILD_BIND) $(SRC_BIND) amazon/aws-sam-cli-build-image-python3.8 sam --version
 
 get_ecr_repository:
-	docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr describe-repositories --repository-names $(ECR_REPOSITORY_NAME) 2>&
+	docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr describe-repositories --repository-names $(ECR_REPOSITORY_NAME) 2>&1
 
 create_ecr_repository:
-	-docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr create-repository --region $(AWS_REGION) --repository-name $(ECR_REPOSITORY_NAME)
+	-docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr create-repository --region $(AWS_REGION) --repository-name $(ECR_REPOSITORY_NAME) 
 
 create_configure_buckets:
 	docker run $(AWS_CREDS_BIND) amazon/aws-cli s3 mb s3://$(S3_BUCKET) --region $(AWS_REGION)
