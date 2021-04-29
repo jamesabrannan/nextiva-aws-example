@@ -78,7 +78,7 @@ pipeline {
             steps {
                 script
                 {
-                    sh "make deploy"
+                    sh "make deploy \"ECR_ARN=${ecr_arn}\""
                 }
             }
         }   
