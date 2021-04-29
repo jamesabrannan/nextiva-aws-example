@@ -1,8 +1,11 @@
 BASE_PATH := $(shell pwd)
 HOME_PATH := /home/jenkins
 AWS_REGION := us-east-1
-BUILD_BIND := -v $(BASE_PATH)/build:/tmp/build
-SRC_BIND := -v $(BASE_PATH)/src:/tmp/src
+
+
+def D_S_V_T = "-v ${BASE_PATH}/templates:/tmp/templates/"
+def D_S_V_B = "-v ${BASE_PATH}/build:/tmp/build"
+def D_S_V_S = "-v ${BASE_PATH}/src:/tmp/src"
 
 #binds credentials path to Docker volume, as cli runs as Docker image
 AWS_CREDS_BIND := -v $(HOME_PATH)/.aws:/root/.aws
@@ -10,8 +13,13 @@ AWS_CREDS_BIND := -v $(HOME_PATH)/.aws:/root/.aws
 #binds the path to bucket configuration to Docker volume
 S3_BUCKET_CFG_BIND := -v $(BASE_PATH)/recording/s3-config:/tmp/s3-config/
 
+BUILD_BIND := -v $(BASE_PATH)/build:/tmp/build
+SRC_BIND := -v $(BASE_PATH)/src:/tmp/src
+
 #binds the path to the CloudFormation template to the Docker volume
 TEMPLATE_BIND := -v $(BASE_PATH)/templates:/tmp/templates/
+
+
 
 #the name of the ECR Repository to create
 ECR_REPOSITORY_NAME = test-chime-recording-repository
@@ -53,5 +61,6 @@ build_image:
 	docker push $(ECR_ARN):$(DOCKER_TAG)
 
 deploy:
+	docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(ECR_ARN)
 	docker run $(AWS_CREDS_BIND) $(S3_BUCKET) $(TEMPLATE_BIND) $(BUILD_BIND) $(SRC_BIND) amazon/aws-sam-cli-build-image-python3.8 sam package --s3-bucket $(S3_BUCKET) --template-file $(SAM_TEMPLATE) --output-template-file $(SAM_BUILD_TEMPLATE) --region $(AWS_REGION)
 	docker run $(AWS_CREDS_BIND) $(S3_BUCKET) $(TEMPLATE_BIND) $(BUILD_BIND) $(SRC_BIND) amazon/aws-sam-cli-build-image-python3.8 sam  deploy --template-file $(SAM_BUILD_TEMPLATE) --stack-name $(STACK_NAME) --parameter-overrides ECRDockerImageArn=$(ECR_ARN) --capabilities CAPABILITY_IAM --region $(AWS_REGION) --no-fail-on-empty-changeset
