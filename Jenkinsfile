@@ -1,5 +1,6 @@
 def JENKINS_WORKSPACE_SCRIPT_NAME = "test-aws-chime"
 def ECR_REPOSITORY_NAME = "test-chime-recording-repository"
+def arn = ""
 
 pipeline {
     agent any
@@ -35,7 +36,7 @@ pipeline {
                         def ecr_created = sh (script:"make get_ecr_repository", returnStdout:true).trim()
                         echo "${ecr_created}"
                         def jsonAsg = readJSON text: ecr_created 
-                        def arn = jsonAsg.repositories[0].repositoryArn
+                        arn = jsonAsg.repositories[0].repositoryUri
                         echo "arn:${arn}"
                     }
                     catch(err){
@@ -67,7 +68,7 @@ pipeline {
             steps {
                 script
                 {
-                    echo "nothing yet"
+                    //sh "make build_image \"ARGS=${arn}\""
                 }
             }
         }   
