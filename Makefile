@@ -26,6 +26,7 @@ S3_LOG_BUCKET := nextiva-connect-media-recordings-log
 SAM_TEMPLATE := /tmp/templates/RecordingDemoCloudformationTemplate.yaml
 SAM_BUILD_TEMPLATE := /tmp/build/packaged.yaml
 
+DOCKER_TAG := latest
 
 init:
 	$(info pulling amazon/aws-cli)
