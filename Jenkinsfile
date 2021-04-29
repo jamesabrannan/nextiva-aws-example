@@ -1,6 +1,7 @@
 def JENKINS_WORKSPACE_SCRIPT_NAME = "test-aws-chime"
 def ECR_REPOSITORY_NAME = "test-chime-recording-repository"
-def arn = ""
+def ecr_arn = ""
+def DOCKER_TAG = "latest"
 
 pipeline {
     agent any
@@ -36,8 +37,8 @@ pipeline {
                         def ecr_created = sh (script:"make get_ecr_repository", returnStdout:true).trim()
                         echo "${ecr_created}"
                         def jsonAsg = readJSON text: ecr_created 
-                        arn = jsonAsg.repositories[0].repositoryUri
-                        echo "arn:${arn}"
+                        ecr_arn = jsonAsg.repositories[0].repositoryUri
+                        echo "ecr_arn:${ecr_arn}"
                     }
                     catch(err){
                         echo 'could not obtain ecr repository'
@@ -68,7 +69,16 @@ pipeline {
             steps {
                 script
                 {
-                    sh "make build_image \"ECR_ARN=${arn}\""
+                    sh "make build_image \"ECR_ARN=${ecr_arn}\""
+                }
+            }
+        }
+        stage('Deploy CloudFormation Resources')
+        {
+            steps {
+                script
+                {
+                    sh "make deploy"
                 }
             }
         }   
