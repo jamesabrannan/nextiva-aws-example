@@ -20,9 +20,6 @@ S3_BUCKET := nextiva-connect-media-recordings
 #the name of the bucket to hold log
 S3_LOG_BUCKET := nextiva-connect-media-recordings-log
 
-test:
-	@echo 'hey'
-
 init:
 	$(info pulling amazon/aws-cli)
 	docker pull amazon/aws-cli

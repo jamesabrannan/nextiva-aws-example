@@ -10,9 +10,7 @@ pipeline {
                 script
                 {
                     try {
-                        def test = sh script:"make test", returnStdout:true
-                        echo "test: ${test}"
-                        //sh "make init"
+                        sh "make init"
                     }
                     catch(err){
                         echo 'could not run makefile init task'
@@ -22,7 +20,6 @@ pipeline {
                 }
             }
         }
-        /*
         stage('Create Elastic Container Registry') 
         {
             steps {
@@ -36,9 +33,10 @@ pipeline {
                     }
                     try {
                         def ecr_created = sh "make get_ecr_repository"
-                        //echo $ecr_created
-                        //def jsonAsg = readJSON text: ecr_created 
-                        //def arn = jsonAsg.repositories[0].repositoryArn
+                        echo '${ecr_created}
+                        def jsonAsg = readJSON text: ecr_created 
+                        def arn = jsonAsg.repositories[0].repositoryArn
+                        echo 'arn:${arn}'
                     }
                     catch(err){
                         echo 'could not obtain ecr repository'
@@ -72,7 +70,7 @@ pipeline {
                     echo "nothing yet"
                 }
             }
-        }  */     
+        }   
     }
 }
   
