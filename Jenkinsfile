@@ -68,6 +68,7 @@ pipeline {
             steps {
                 script
                 {
+                    echo "nothing yet"
                     //sh "make build_image \"ARGS=${arn}\""
                 }
             }
