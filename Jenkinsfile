@@ -10,7 +10,7 @@ pipeline {
                 script
                 {
                     try {
-                        def test = sh script:"echo damn", returnStdout:true
+                        def test = sh script:"make test", returnStdout:true
                         echo "test: ${test}"
                         //sh "make init"
                     }

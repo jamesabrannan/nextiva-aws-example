@@ -21,7 +21,7 @@ S3_BUCKET := nextiva-connect-media-recordings
 S3_LOG_BUCKET := nextiva-connect-media-recordings-log
 
 test:
-	@echo 'test'
+	@echo 'hey'
 
 init:
 	$(info pulling amazon/aws-cli)
