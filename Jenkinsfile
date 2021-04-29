@@ -11,7 +11,7 @@ pipeline {
                 {
                     try {
                         def test = sh (script:"echo damn", returnStdout:true).trim()
-                        echo ${test} + ' abc 123'
+                        echo ${test}
                         //sh "make init"
                     }
                     catch(err){
