@@ -10,7 +10,7 @@ pipeline {
                 script
                 {
                     try {
-                        def test = (script:"make test", returnStdout:true).trim()
+                        def test = sh (script:"make test", returnStdout:true).trim()
                         echo ${test}
                         sh "make init"
                     }
