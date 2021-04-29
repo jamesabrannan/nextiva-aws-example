@@ -12,7 +12,7 @@ pipeline {
                     try {
                         def test = sh (script:"echo damn", returnStdout:true).trim()
                         echo ${test} + ' abc 123'
-                        sh "make init"
+                        //sh "make init"
                     }
                     catch(err){
                         echo 'could not run makefile init task'
@@ -22,6 +22,7 @@ pipeline {
                 }
             }
         }
+        /*
         stage('Create Elastic Container Registry') 
         {
             steps {
@@ -71,7 +72,7 @@ pipeline {
                     echo "nothing yet"
                 }
             }
-        }       
+        }  */     
     }
 }
   
