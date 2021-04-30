@@ -1,12 +1,7 @@
-def JENKINS_WORKSPACE_SCRIPT_NAME = "test-aws-chime"
-def ECR_REPOSITORY_NAME = "test-chime-recording-repository"
-def ecr_arn = ""
-def DOCKER_TAG = "latest"
-
 pipeline {
     agent any
     stages {
-    /*    stage('Ensure AWS Resources') 
+        stage('Ensure AWS Resources') 
         {
             steps {
                 script
@@ -69,7 +64,7 @@ pipeline {
                     sh "make deploy"
                 }
             }
-        }   */
+        }   
         stage('Setup AutoScaling')
         {
             steps {
