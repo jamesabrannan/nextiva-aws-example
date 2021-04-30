@@ -54,6 +54,9 @@ Parameters:
   RecordingDemoLogGroupName:
     Type: String
     Default: ConnectMediaCallsRecordingLogGroup
+  RecordingArtifactsUploadBucket:
+    Type: String
+    Default: RecordingBucket  
   EnvironmentName:
     Description: An environment name that is prefixed to resource names
     Type: String
