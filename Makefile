@@ -2,7 +2,7 @@ BASE_PATH := $(shell pwd)
 HOME_PATH := /home/jenkins
 AWS_REGION := us-east-1
 
-def STACK_NAME = "test-chime-recording-stack"
+STACK_NAME := test-chime-recording-stack
 
 #binds credentials path to Docker volume, as cli runs as Docker image
 AWS_CREDS_BIND := -v $(HOME_PATH)/.aws:/root/.aws
