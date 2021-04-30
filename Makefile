@@ -23,6 +23,7 @@ ECR_REPOSITORY_NAME = test-chime-recording-repository
 S3_CLOUDFORMATION_BUCKET := test-chime-recording-repository-bucket
 
 S3_RECORDING_BUCKET := nextiva-connect-media-recordings
+S3_CONFIG_FILE := /tmp/s3-config/s3config.json
 
 #the name of the bucket to hold log
 S3_LOG_BUCKET := nextiva-connect-media-recordings-log
@@ -50,6 +51,10 @@ create_configure_buckets:
 	docker run $(AWS_CREDS_BIND) amazon/aws-cli s3 mb s3://$(S3_CLOUDFORMATION_BUCKET) --region $(AWS_REGION)
 	docker run $(AWS_CREDS_BIND) amazon/aws-cli s3 mb s3://$(S3_RECORDING_BUCKET) --region $(AWS_REGION)
 	docker run $(AWS_CREDS_BIND) amazon/aws-cli s3 mb s3://$(S3_LOG_BUCKET) --region $(AWS_REGION)
+	docker run $(AWS_CREDS_BIND) $(S3_BUCKET_CFG_BIND) amazon/aws-cli s3api put-bucket-lifecycle --bucket $(S3_RECORDING_BUCKET) --lifecycle-configuration file://$(S3_CONFIG_FILE)
+	docker run $(AWS_CREDS_BIND) $(S3_BUCKET_CFG_BIND) amazon/aws-cli s3api put-public-access-block --bucket $(S3_RECORDING_BUCKET) --public-access-block-configuration 'BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true'
+	docker run $(AWS_CREDS_BIND) $(S3_BUCKET_CFG_BIND) amazon/aws-cli s3api put-bucket-lifecycle --bucket $(S3_LOG_BUCKET) --lifecycle-configuration file://$(S3_CONFIG_FILE)
+	docker run $(AWS_CREDS_BIND) $(S3_BUCKET_CFG_BIND) amazon/aws-cli s3api put-public-access-block --bucket $(S3_LOG_BUCKET) --public-access-block-configuration 'BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true'
 
 build_image:
 	docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(ECR_ARN)
