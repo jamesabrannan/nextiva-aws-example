@@ -54,7 +54,7 @@ create_configure_buckets:
 	docker run $(AWS_CREDS_BIND) $(S3_BUCKET_CFG_BIND) amazon/aws-cli s3api put-public-access-block --bucket $(S3_LOG_BUCKET) --public-access-block-configuration 'BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true'
 
 build_image:
-	ECR_ARN=$$(docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr describe-repositories --repository-names $(ECR_REPOSITORY_NAME) --region $(AWS_REGION)) | jq '.repositories[0].repositoryUri') 
+	ECR_ARN=$$(docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr describe-repositories --repository-names $(ECR_REPOSITORY_NAME) --region $(AWS_REGION) | jq '.repositories[0].repositoryUri') 
 	#docker run $(AWS_CREDS_BIND) $(S3_BUCKET_BIND) amazon/aws-cli ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(ECR_ARN)
 	#docker build -t $(ECR_REPOSITORY_NAME) .
 	#docker tag $(ECR_REPOSITORY_NAME):$(DOCKER_TAG) $(ECR_ARN):$(DOCKER_TAG)
