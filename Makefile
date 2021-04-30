@@ -55,13 +55,11 @@ create_configure_buckets:
 
 build_image:
 	$(eval ECR_ARN := $(shell docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr describe-repositories --region $(AWS_REGION) --repository-names $(ECR_REPOSITORY_NAME) | jq '.repositories[0].repositoryUri'))
-	$(info $(ECR_ARN))
-	#docker run $(AWS_CREDS_BIND) $(S3_BUCKET_BIND) amazon/aws-cli ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(ECR_ARN)
-	#docker build -t $(ECR_REPOSITORY_NAME) .
-	#docker tag $(ECR_REPOSITORY_NAME):$(DOCKER_TAG) $(ECR_ARN):$(DOCKER_TAG)
-	#docker push $(ECR_ARN):$(DOCKER_TAG)
+	docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(ECR_ARN)
+	docker build -t $(ECR_REPOSITORY_NAME) .
+	docker tag $(ECR_REPOSITORY_NAME):$(DOCKER_TAG) $(ECR_ARN):$(DOCKER_TAG)
+	docker push $(ECR_ARN):$(DOCKER_TAG)
 
 deploy:
-	@ECR_ARN=$$(docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr describe-repositories --repository-names $(ECR_REPOSITORY_NAME) | jq '.repositories[0].repositoryUri') 
-	#docker run $(AWS_CREDS_BIND) $(TEMPLATE_BIND) $(BUILD_BIND) $(SRC_BIND) amazon/aws-sam-cli-build-image-python3.8 sam package --s3-bucket $(S3_CLOUDFORMATION_BUCKET) --template-file $(SAM_TEMPLATE) --output-template-file $(SAM_BUILD_TEMPLATE) --region $(AWS_REGION)
-	#docker run $(AWS_CREDS_BIND) $(TEMPLATE_BIND) $(BUILD_BIND) $(SRC_BIND) amazon/aws-sam-cli-build-image-python3.8 sam  deploy --template-file $(SAM_BUILD_TEMPLATE) --stack-name $(STACK_NAME) --parameter-overrides ECRDockerImageArn=$(ECR_ARN) RecordingArtifactsUploadBucket=$(S3_RECORDING_BUCKET) --capabilities CAPABILITY_IAM --region $(AWS_REGION) --no-fail-on-empty-changeset
+	docker run $(AWS_CREDS_BIND) $(TEMPLATE_BIND) $(BUILD_BIND) $(SRC_BIND) amazon/aws-sam-cli-build-image-python3.8 sam package --s3-bucket $(S3_CLOUDFORMATION_BUCKET) --template-file $(SAM_TEMPLATE) --output-template-file $(SAM_BUILD_TEMPLATE) --region $(AWS_REGION)
+	docker run $(AWS_CREDS_BIND) $(TEMPLATE_BIND) $(BUILD_BIND) $(SRC_BIND) amazon/aws-sam-cli-build-image-python3.8 sam  deploy --template-file $(SAM_BUILD_TEMPLATE) --stack-name $(STACK_NAME) --parameter-overrides ECRDockerImageArn=$(ECR_ARN) RecordingArtifactsUploadBucket=$(S3_RECORDING_BUCKET) --capabilities CAPABILITY_IAM --region $(AWS_REGION) --no-fail-on-empty-changeset
