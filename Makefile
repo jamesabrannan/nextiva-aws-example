@@ -16,8 +16,6 @@ SRC_BIND := -v $(BASE_PATH)/src:/tmp/src
 #binds the path to the CloudFormation template to the Docker volume
 TEMPLATE_BIND := -v $(BASE_PATH)/templates:/tmp/templates/
 
-
-
 #the name of the ECR Repository to create
 ECR_REPOSITORY_NAME = test-chime-recording-repository
 
@@ -28,7 +26,6 @@ S3_RECORDING_BUCKET := nextiva-connect-media-recordings
 
 #the name of the bucket to hold log
 S3_LOG_BUCKET := nextiva-connect-media-recordings-log
-
 
 SAM_TEMPLATE := /tmp/templates/RecordingDemoCloudformationTemplate.yaml
 SAM_BUILD_TEMPLATE := /tmp/build/packaged.yaml
@@ -44,7 +41,7 @@ init:
 	docker run $(AWS_CREDS_BIND) $(S3_BUCKET_CFG_BIND) $(TEMPLATE_BIND) $(BUILD_BIND) $(SRC_BIND) amazon/aws-sam-cli-build-image-python3.8 sam --version
 
 get_ecr_repository:
-	@docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr describe-repositories --repository-names $(ECR_REPOSITORY_NAME
+	@docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr describe-repositories --repository-names $(ECR_REPOSITORY_NAME)
 
 create_ecr_repository:
 	-docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr create-repository --region $(AWS_REGION) --repository-name $(ECR_REPOSITORY_NAME) 
