@@ -44,7 +44,7 @@ init:
 	docker run $(AWS_CREDS_BIND) $(S3_BUCKET_CFG_BIND) $(TEMPLATE_BIND) $(BUILD_BIND) $(SRC_BIND) amazon/aws-sam-cli-build-image-python3.8 sam --version
 
 get_ecr_repository:
-	@docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr describe-repositories --repository-names $(ECR_REPOSITORY_NAME)
+	@docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr describe-repositories --repository-names $(ECR_REPOSITORY_NAME
 
 create_ecr_repository:
 	-docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr create-repository --region $(AWS_REGION) --repository-name $(ECR_REPOSITORY_NAME) 
