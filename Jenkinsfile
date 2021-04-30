@@ -6,7 +6,7 @@ def DOCKER_TAG = "latest"
 pipeline {
     agent any
     stages {
-        stage('Ensure AWS Resources') 
+    /*    stage('Ensure AWS Resources') 
         {
             steps {
                 script
@@ -69,7 +69,16 @@ pipeline {
                     sh "make deploy"
                 }
             }
-        }   
+        }   */
+        stage('Setup AutoScaling')
+        {
+            steps {
+                script
+                {
+                    sh "make setup_autoscaling"
+                }
+            }
+        } 
     }
 }
   
