@@ -68,7 +68,6 @@ setup_autoscaling:
 	$(eval INVOKE_URL := $(shell docker run $(AWS_CREDS_BIND) amazon/aws-cli cloudformation describe-stacks --stack-name $(STACK_NAME) --query Stacks[0].Outputs[0].OutputValue --output text --region $(AWS_REGION)))
 	$(eval ECS_CLUSTER_NAME := $(shell docker run $(AWS_CREDS_BIND) amazon/aws-cli cloudformation describe-stacks --stack-name $(STACK_NAME) --query Stacks[0].Outputs[1].OutputValue --output text --region $(AWS_REGION)))
 	$(eval AUTO_SCALING_GROUP_NAME := $(shell docker run $(AWS_CREDS_BIND) amazon/aws-cli cloudformation describe-stacks --stack-name $(STACK_NAME) --query Stacks[0].Outputs[2].OutputValue --output text --region $(AWS_REGION)))
-	$(info $(AUTO_SCALING_GROUP_NAME))
 	docker run $(AWS_CREDS_BIND) amazon/aws-cli autoscaling update-auto-scaling-group --auto-scaling-group-name $(AUTO_SCALING_GROUP_NAME) --new-instances-protected-from-scale-in --region $(AWS_REGION) 
 	$(eval AUTO_SCALING_GROUP_PROVIDER_NAME := $(AUTO_SCALING_GROUP_NAME)CapacityProvider)
 	$(info $(AUTO_SCALING_GROUP_PROVIDER_NAME))
