@@ -33,18 +33,6 @@ pipeline {
                     catch(err){
                         echo ${err}
                     }
-                    try {
-                        def ecr_created = sh (script:"make get_ecr_repository", returnStdout:true).trim()
-                        echo "${ecr_created}"
-                        def jsonAsg = readJSON text: ecr_created 
-                        ecr_arn = jsonAsg.repositories[0].repositoryUri
-                        echo "ecr_arn:${ecr_arn}"
-                    }
-                    catch(err){
-                        echo 'could not obtain ecr repository'
-                        echo $(err)
-                        currentBuild.result = 'FAILURE'
-                    }
                 }
             }
         }
@@ -69,7 +57,7 @@ pipeline {
             steps {
                 script
                 {
-                    sh "make build_image \"ECR_ARN=${ecr_arn}\""
+                    sh "make build_image"
                 }
             }
         }
@@ -78,7 +66,7 @@ pipeline {
             steps {
                 script
                 {
-                    sh "make deploy \"ECR_ARN=${ecr_arn}\""
+                    sh "make deploy"
                 }
             }
         }   
