@@ -112,7 +112,7 @@ Resources:
           ecsTaskDefinationArn: 
             Ref: ECSRecordingDemoTaskDefinition
           recordingArtifactsBucket:
-            !Ref: RecordingArtifactsUploadBucket
+            Ref: RecordingArtifactsUploadBucket
       CodeUri: ../src/
       Events:
         Api1:
