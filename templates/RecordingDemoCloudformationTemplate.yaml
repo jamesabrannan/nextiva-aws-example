@@ -71,12 +71,6 @@ Parameters:
     Type: String
     Default: 10.192.11.0/24
 Resources:
-  RecordingArtifactsUploadBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-        AccessControl: BucketOwnerFullControl
-        BucketName:
-          Fn::Join: ['', ['chime-meeting-sdk-', {Ref: 'AWS::AccountId'}, '-', {Ref: 'AWS::Region'}, '-recordings']]
   RecordingDemoLambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
@@ -90,7 +84,7 @@ Resources:
               Principal:
                 Service: [lambda.amazonaws.com]
             Version: '2012-10-17'
-  
+
   RecordingDemoBuildDeployGroup:
     Type: AWS::Logs::LogGroup
     Properties:
@@ -118,7 +112,7 @@ Resources:
           ecsTaskDefinationArn: 
             Ref: ECSRecordingDemoTaskDefinition
           recordingArtifactsBucket:
-            Ref: RecordingArtifactsUploadBucket
+            !Ref: RecordingArtifactsUploadBucket
       CodeUri: ../src/
       Events:
         Api1:
