@@ -36,7 +36,8 @@ def AWS_REGION = "us-east-1"
 def DOCKER_TAG = "latest"
 // name of the bucket to save recording logging files to
 def S3_BUCKET_LOG = "nextiva-connect-media-recordings-log"
-// name of the bucket to deploy recordings
+
+// name of the bucket to upload CloudFormation template
 def S3_BUCKET = "nextiva-connect-media-recordings"
 def S3_BUCKET_ERROR = "An error occurred (404) when calling the HeadBucket operation: Not Found"
 // AWS path to the EC2 instance that will be spun up to deploy docker application to on AWS

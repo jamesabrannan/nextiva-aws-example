@@ -1,3 +1,19 @@
+// ===================================================================
+// Copyright (c) 2020 Nextiva, Inc. to Present.
+// All rights reserved.
+//
+//
+// Jenkins Pipeline script for building recording application on AWS
+// uses Makefile to perform steps to create AWS resources.
+//
+// Dependencies:
+//  AWS Credentials visible by Jenkins in ~/.aws
+//  Docker
+//  make
+//  jq
+// ====================================================================
+
+
 pipeline {
     agent any
     stages {
@@ -26,6 +42,7 @@ pipeline {
                         sh "make create_ecr_repository"
                     }
                     catch(err){
+                        //note: do not catch the error, continue
                         echo ${err}
                     }
                 }
