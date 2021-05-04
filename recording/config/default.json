@@ -2,7 +2,7 @@
     "port": 3001,
     "logConfig": {
         "logLabel" : "connect-media-recordings",
-       "logBucketName" : "nextiva-connect-media-recordings-log",
+       "logBucketName" : "james-connect-media-recordings-log",
         "logLevel":"debug"
     },
     "ffmpeg-config":{
