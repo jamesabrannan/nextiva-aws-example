@@ -59,7 +59,7 @@ logger.log("debug", `arguments: ${args}`);
 
 logger.log(
   "info",
-  `${loggerFile} BUCKET_NAME: ${BUCKET_NAME} CORP_ACCNT_ID: ${CORP_ACCNT_ID} MEDIA_CALL_ID: ${MEDIA_CALL_ID}`
+  `${loggerFile} BUCKET_NAME: ${BUCKET_NAME} CORP_ACCNT_ID: ${CORP_ACCNT_ID} MEDIA_CALL_ID: ${MEDIA_CALL_ID} Width: ${BROWSER_SCREEN_WIDTH} Height: ${BROWSER_SCREEN_HEIGHT}`
 );
 
 // create the file to upload to S3 bucket

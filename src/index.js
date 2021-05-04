@@ -73,7 +73,7 @@ exports.handler = function (event, context, callback) {
           "Media call Id: " + event.queryStringParameters.mediaCallId
         );
         mediaCallId = event.queryStringParameters.mediaCallId;
-        console.log("Recording bucket: " + RECORDING_ARTIFACTS_BUCKET);
+        console.log("Recording bucket: " + recordingArtifactsBucket);
         return startRecording(
           event,
           context,
