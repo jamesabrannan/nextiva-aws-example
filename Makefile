@@ -36,7 +36,7 @@ HOME_PATH := /home/jenkins
 AWS_REGION := us-east-1
 
 #name to provide the stack to be deployed on AWS
-STACK_NAME := test-chime-recording-stack
+STACK_NAME := james-chime-recording-stack
 
 #binds credentials path to Docker volume, as cli runs as Docker image
 AWS_CREDS_BIND := -v $(HOME_PATH)/.aws:/root/.aws
@@ -50,14 +50,14 @@ SRC_BIND := -v $(BASE_PATH)/src:/tmp/src
 TEMPLATE_BIND := -v $(BASE_PATH)/templates:/tmp/templates/
 
 #the name of the ECR Repository to create
-ECR_REPOSITORY_NAME = james-test-chime-recording-repository
+ECR_REPOSITORY_NAME = james-chime-recording-repository
 
 #bucket to hold CloudFormation template
-S3_CLOUDFORMATION_BUCKET := james-test-chime-recording-repository-bucket
+S3_CLOUDFORMATION_BUCKET := james-chime-recording-repository-bucket
 #bucket to hold recordings
-S3_RECORDING_BUCKET := james-nextiva-connect-media-recordings
+S3_RECORDING_BUCKET := james-connect-media-recordings
 #bucket to hold log files for recording app
-S3_LOG_BUCKET := james-nextiva-connect-media-recordings-log
+S3_LOG_BUCKET := james-connect-media-recordings-log
 #configuration file for assigning permissions to recording and log buckets
 #note: this is the docker volume path not the real path
 S3_CONFIG_FILE := /tmp/s3-config/s3config.json
