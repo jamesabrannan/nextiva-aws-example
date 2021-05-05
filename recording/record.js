@@ -40,7 +40,13 @@ var recordingsFolder = config.get("environment-config.tempRecordingFolder");
 
 if (!fs.existsSync(recordingsFolder)) {
   fs.mkdirSync(recordingsFolder);
+  fs.get;
 }
+
+logger.log(
+  "debug",
+  `${loggerFile}: path to recordings: ` + fs.dirname(recordingsFolder)
+);
 
 // get the bucket name and height and width of screen from
 // shell script
