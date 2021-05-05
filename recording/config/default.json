@@ -11,6 +11,6 @@
     "environment-config":{
         "isLocal":false,
         "tempRecordingFolder":"./recordings",
-        "recordTimeoutDuration":"00:00:10"
+        "recordTimeoutDuration":"00:00:30"
     }
 }
