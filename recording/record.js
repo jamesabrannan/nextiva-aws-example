@@ -261,7 +261,7 @@ process.on("SIGINT", (code, signal) => {
     "info",
     `EXITING FFMPG: ${loggerFile}: SIGINIT: exited with code ${code} and signal ${signal}(SIGINT)`
   );
-  process.kill("SIGTERM");
+  //process.kill("SIGTERM");
 });
 
 function saveFile(recordingName) {
