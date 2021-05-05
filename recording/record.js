@@ -36,6 +36,12 @@ const loggerFile = "[record.js]";
 
 var recordingsFolder = config.get("environment-config.tempRecordingFolder");
 
+// create the folder to hold recordings
+
+if (!fs.existsSync(recordingsFolder)) {
+  fs.mkdirSync(recordingsFolder);
+}
+
 // get the bucket name and height and width of screen from
 // shell script
 
