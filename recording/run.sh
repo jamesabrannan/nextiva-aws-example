@@ -74,4 +74,4 @@ firefox \
 sleep 0.5  # Ensure this has started before moving on
 xdotool mousemove 1 1 click 1  # Move mouse out of the way so it doesn't trigger the "pause" overlay on the video tile
 
-exec node /recording/record.js ${SCREEN_WIDTH} ${SCREEN_HEIGHT} ${S3_BUCKET_NAME} ${CORPORATE_ACCOUNT_ID} ${MEDIA_CALL_ID}
+exec node /recording/record.js "${SCREEN_WIDTH}" "${SCREEN_HEIGHT}" "${S3_BUCKET_NAME}" "${CORPORATE_ACCOUNT_ID}" "${MEDIA_CALL_ID}"
