@@ -161,10 +161,10 @@ if (config.get("environment-config.isLocal") == true) {
   transcodeStreamToOutput = spawn("ffmpeg", [
     "-hide_banner",
     "-loglevel",
-    `${FFMPEG_LOG_LEVEL}`,
-    "-t",
-    `${timeout}`,
+    "error",
+    // disable interaction via stdin
     "-nostdin",
+    // screen image size
     "-s",
     `${BROWSER_SCREEN_WIDTH}x${BROWSER_SCREEN_HEIGHT}`,
     // video frame rate
@@ -176,6 +176,8 @@ if (config.get("environment-config.isLocal") == true) {
     // grab the x11 display as video input
     "-f",
     "x11grab",
+    "-t",
+    `${timeout}`,
     "-i",
     `${DISPLAY}`,
     // grab pulse as audio input
@@ -217,6 +219,9 @@ if (config.get("environment-config.isLocal") == true) {
     // adjust fragmentation to prevent seeking(resolve issue: muxer does not support non seekable output)
     "-movflags",
     "frag_keyframe+empty_moov",
+    // set output format to mp4 and output file to stdout
+    "-f",
+    "mp4",
     `${recordingName}`
   ]);
 }
@@ -242,7 +247,7 @@ var timeoutExit = true;
 process.on("SIGTERM", (code, signal) => {
   logger.log(
     "info",
-    `${loggerFile}: SIGTERM exited with code ${code} and signal ${signal}(SIGTERM)`
+    `EXITING FFMPG: ${loggerFile}: SIGTERM exited with code ${code} and signal ${signal}(SIGTERM)`
   );
   timeoutExit = false;
   process.kill(transcodeStreamToOutput.pid, "SIGTERM");
@@ -254,14 +259,25 @@ process.on("SIGINT", (code, signal) => {
   timeoutExit = false;
   logger.log(
     "info",
-    `${loggerFile}: SIGINIT: exited with code ${code} and signal ${signal}(SIGINT)`
+    `EXITING FFMPG: ${loggerFile}: SIGINIT: exited with code ${code} and signal ${signal}(SIGINT)`
   );
+  process.kill("SIGTERM");
 });
 
 function saveFile(recordingName) {
-  logger.log("info", `${loggerFile}: saving ${s3FileName} to S3`);
+  logger.log(
+    "debug",
+    `${loggerFile}: attempting to write file to S3: file: ` + recordingName
+  );
   fs.readFile(recordingName, (err, data) => {
-    if (err) throw err;
+    if (err) {
+      logger.log(
+        "error",
+        `${loggerFile}: error saveFile, file: ` + recordingName
+      );
+      throw err;
+    }
+    logger.log("info", `${loggerFile}: saving ${s3FileName} to S3`);
     new S3Uploader(BUCKET_NAME, s3FileName).uploadStream(data);
   });
 }
