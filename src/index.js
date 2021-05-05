@@ -14,7 +14,7 @@ var ecs = new AWS.ECS()
 
 // Reading environment variables
 const ecsClusterArn = process.env.ecsClusterArn
-const ecsTaskDefinationArn = process.env.ecsTaskDefinationArn
+const ecsTaskDefinitionArn = process.env.ecsTaskDefinitionArn
 const ecsContainerName = process.env.ecsContainerName
 const recordingArtifactsBucket = process.env.recordingArtifactsBucket
 
@@ -170,8 +170,10 @@ function startRecording(
         type: "distinctInstance"
       }
     ],
-    taskDefinition: ecsTaskDefinationArn
+    taskDefinition: ecsTaskDefinitionArn
   }
+
+  console.log("ecsRunTaskParams:" + ecsRunTaskParams)
 
   ecs.runTask(ecsRunTaskParams, function (err, data) {
     if (err) {
