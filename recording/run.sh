@@ -5,7 +5,7 @@
 # Connect-Media-Recordings
 # Based on AWS Chime Meeting Recording Demo
 # Start pulseaudio, firefox with openH264 plugin
-# Start outputing browser content
+# Start outputing browser content then call nodejs
 
 set -xeo pipefail
 

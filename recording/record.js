@@ -46,7 +46,7 @@ logger.log(
   `${loggerFile}: original arguments before slicing: ${origArgs}`
 );
 
-//exec node /recording/record.js ${SCREEN_WIDTH} ${SCREEN_HEIGHT} ${S3_BUCKET_NAME} ${CORPORATE_ACCOUNT_ID} ${MEDIA_CALL_ID}
+//exec node /recording/record.js ${SCREEN_WIDTH} ${SCREEN_HEIGHT} ${S3_BUCKET_NAME} ${CORPORATE_ACCOUNT_NUMBER} ${MEDIA_CALL_ID}
 
 const args = process.argv.slice(2);
 const BROWSER_SCREEN_WIDTH = args[0];
@@ -139,7 +139,7 @@ if (config.get("environment-config.isLocal") == true) {
     "-y",
     "-r",
     "30",
-    `${recordingName}`,
+    `${recordingName}`
   ]);
 } else {
   logger.log(
@@ -205,7 +205,7 @@ if (config.get("environment-config.isLocal") == true) {
     // adjust fragmentation to prevent seeking(resolve issue: muxer does not support non seekable output)
     "-movflags",
     "frag_keyframe+empty_moov",
-    `${recordingName}`,
+    `${recordingName}`
   ]);
 }
 
