@@ -173,6 +173,8 @@ function startRecording(
     taskDefinition: ecsTaskDefinitionArn
   }
 
+  console.log("ecsRunTaskParams:" + JSON.stringify(ecsRunTaskParams))
+
   ecs.runTask(ecsRunTaskParams, function (err, data) {
     if (err) {
       console.log(err) // an error occurred
