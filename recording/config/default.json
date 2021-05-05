@@ -6,7 +6,7 @@
         "logLevel":"debug"
     },
     "ffmpeg-config":{
-        "logLevel" :"error"
+        "logLevel" :"debug"
     },
     "environment-config":{
         "isLocal":false,
