@@ -82,7 +82,7 @@ pipeline {
                 }
             }
         }   
-/*        stage('Setup AutoScaling')
+        stage('Setup AutoScaling')
         {
             steps {
                 script
@@ -90,6 +90,6 @@ pipeline {
                     sh "make setup_autoscaling"
                 }
             }
-        } */
+        } 
     }
 }
