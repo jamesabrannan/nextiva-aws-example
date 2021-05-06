@@ -30,12 +30,6 @@ const { stderr, stdout } = require("process");
 
 const loggerFile = "[record.js]";
 
-// folder to hold the temporary recordings
-// note: no need to delete the temporary recordings as the Docker instance
-// is terminated after recording completes and deletes recording
-
-var recordingsFolder = config.get("environment-config.tempRecordingFolder");
-
 // get the bucket name and height and width of screen from
 // shell script
 
@@ -100,6 +94,8 @@ var transcodeStreamToOutput;
 // complete path and temporary name of recording
 
 var recordingName = `${MEDIA_CALL_ID}.mp4`;
+
+logger.log("debug", `${loggerFile}: recording name: ` + recordingName);
 
 // if local development use the local recording settings
 // otherwise use the real ffmpeg recording
