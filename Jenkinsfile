@@ -33,21 +33,6 @@ pipeline {
                 }
             }
         }
-        stage('Create Elastic Container Registry') 
-        {
-            steps {
-                script
-                {
-                    try {
-                        sh "make create_ecr_repository"
-                    }
-                    catch(err){
-                        //note: do not catch the error, continue
-                        echo ${err}
-                    }
-                }
-            }
-        }
         stage('Create and Configure S3 Buckets') 
         {
             steps {
@@ -64,6 +49,21 @@ pipeline {
                 }
             }
         }
+        stage('Create Elastic Container Registry') 
+        {
+            steps {
+                script
+                {
+                    try {
+                        sh "make create_ecr_repository"
+                    }
+                    catch(err){
+                        //note: do not catch the error, continue
+                        echo ${err}
+                    }
+                }
+            }
+        }
         stage('Create and Deploy Docker ECR')
         {
             steps {
@@ -73,7 +73,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy CloudFormation Resources')
+ /*       stage('Deploy CloudFormation Resources')
         {
             steps {
                 script
@@ -90,7 +90,7 @@ pipeline {
                     sh "make setup_autoscaling"
                 }
             }
-        } 
+        }  */
     }
 }
   
