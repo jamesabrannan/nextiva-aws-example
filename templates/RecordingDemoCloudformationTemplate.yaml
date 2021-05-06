@@ -112,7 +112,7 @@ Resources:
             Fn::GetAtt: [ECSCluster, Arn]
           ecsContainerName: 
             Ref: ECSContainerName
-          ecsTaskDefinitionArn: 
+          ecsTaskDefinationArn: 
             Ref: ECSRecordingDemoTaskDefinition
           recordingArtifactsBucket:
             Ref: RecordingArtifactsUploadBucket
