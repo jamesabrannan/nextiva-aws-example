@@ -99,7 +99,7 @@ var transcodeStreamToOutput;
 
 // complete path and temporary name of recording
 
-var recordingName = `${recordingsFolder}/${MEDIA_CALL_ID}.mp4`;
+var recordingName = `${MEDIA_CALL_ID}.mp4`;
 
 // if local development use the local recording settings
 // otherwise use the real ffmpeg recording
