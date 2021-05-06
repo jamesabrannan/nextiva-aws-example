@@ -175,8 +175,6 @@ function startRecording(
     taskDefinition: ecsTaskDefinitionArn
   };
 
-  console.log("ecsRunTaskParams:" + JSON.stringify(ecsRunTaskParams));
-
   ecs.runTask(ecsRunTaskParams, function (err, data) {
     if (err) {
       console.log(err); // an error occurred
@@ -208,6 +206,7 @@ function stopRecording(event, context, taskId) {
     if (err) {
       console.log(err); // an error occurred
       response.statusCode = err.statusCode;
+      response.body = JSON.stringify(err, null, " ");
       context.succeed(response);
     } else {
       console.log(data); // successful response
