@@ -69,6 +69,12 @@ logger.log(
 
 logger.log("info", `${loggerFile} S3 Filename: ${s3FileName}`);
 
+// complete path and temporary name of recording
+
+var recordingName = `${MEDIA_CALL_ID}.mp4`;
+
+logger.log("debug", `${loggerFile}: RECORDING NAME:` + recordingName);
+
 // These constants are ignored if running locally
 
 const MEETING_URL = process.env.MEETING_URL || "Not present in environment";
@@ -90,12 +96,6 @@ const FFMPEG_LOG_LEVEL = config.get("ffmpeg-config.logLevel");
 // fmpeg -f avfoundation -i "1:0" -vf  "crop=1020:1080:0:0" -pix_fmt yuv420p -y -r 30 test.mp4
 
 var transcodeStreamToOutput;
-
-// complete path and temporary name of recording
-
-var recordingName = `${MEDIA_CALL_ID}.mp4`;
-
-logger.log("debug", `${loggerFile}: recording name: ` + recordingName);
 
 // if local development use the local recording settings
 // otherwise use the real ffmpeg recording
