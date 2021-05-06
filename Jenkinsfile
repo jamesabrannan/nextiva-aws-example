@@ -73,7 +73,7 @@ pipeline {
                 }
             }
         }
- /*       stage('Deploy CloudFormation Resources')
+        stage('Deploy CloudFormation Resources')
         {
             steps {
                 script
@@ -90,7 +90,7 @@ pipeline {
                     sh "make setup_autoscaling"
                 }
             }
-        }  */
+        } 
     }
 }
   
