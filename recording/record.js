@@ -73,7 +73,10 @@ logger.log("info", `${loggerFile} S3 Filename: ${s3FileName}`);
 
 var recordingName = `${MEDIA_CALL_ID}.mp4`;
 
-logger.log("debug", `${loggerFile}: RECORDING NAME:` + recordingName);
+logger.log(
+  "debug",
+  `${loggerFile}: RECORDING NAME:` + recordingName + " CHANGED"
+);
 
 // These constants are ignored if running locally
 
@@ -146,8 +149,6 @@ if (config.get("environment-config.isLocal") == true) {
     "-hide_banner",
     "-loglevel",
     `${FFMPEG_LOG_LEVEL}`,
-    "-t",
-    `${timeout}`,
     "-nostdin",
     "-s",
     `${BROWSER_SCREEN_WIDTH}x${BROWSER_SCREEN_HEIGHT}`,
@@ -160,6 +161,8 @@ if (config.get("environment-config.isLocal") == true) {
     // grab the x11 display as video input
     "-f",
     "x11grab",
+    "-t",
+    `${timeout}`,
     "-i",
     `${DISPLAY}`,
     // grab pulse as audio input
