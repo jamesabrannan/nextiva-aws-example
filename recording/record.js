@@ -111,7 +111,7 @@ var transcodeStreamToOutput;
 // -t: the timeout in duration before ending recording
 
 var timeout = config.get("environment-config.recordTimeoutDuration");
-logger.log("debug", `${loggerFile}: timeout for video: ${timeout}`);
+logger.log("debug", `${loggerFile}: TIMEOUT for video: ${timeout}`);
 
 if (config.get("environment-config.isLocal") == true) {
   // debug settings for personal OSX computer's settings, see note above
@@ -161,8 +161,6 @@ if (config.get("environment-config.isLocal") == true) {
     // grab the x11 display as video input
     "-f",
     "x11grab",
-    "-t",
-    `${timeout}`,
     "-i",
     `${DISPLAY}`,
     // grab pulse as audio input
@@ -204,6 +202,8 @@ if (config.get("environment-config.isLocal") == true) {
     // adjust fragmentation to prevent seeking(resolve issue: muxer does not support non seekable output)
     "-movflags",
     "frag_keyframe+empty_moov",
+    "-t",
+    `${timeout}`,
     `${recordingName}`
   ]);
 }
