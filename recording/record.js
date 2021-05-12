@@ -113,18 +113,6 @@ var transcodeStreamToOutput;
 var timeout = config.get("environment-config.recordTimeoutDuration");
 logger.log("debug", `${loggerFile}: TIMEOUT for video: ${timeout}`);
 
-// THIS IS IMMEDIATE TERMINATION, NO LOGGING NO NOTHING, INTENDED FOR
-// RUNAWAY DOCKER ECS INSTANCE. THIS IS A FAILURE CONDITION
-// See the -t parameter on the ffmpeg
-// command for graceful timeout of recording.
-// ensure no runaway process if the timeout fails for ffmpeg by terminating process
-// convert to milliseconds. This number should be larger than video timeout or will
-// not record. this is to prevent runnaway docker ECS tasks
-
-setInterval(function () {
-  process.exit(1);
-}, config.get("environment-config.processTimeoutDurationSeconds") * 1000);
-
 if (config.get("environment-config.isLocal") == true) {
   // debug settings for personal OSX computer's settings, see note above
   // to determine these values
