@@ -208,14 +208,14 @@ if (config.get("environment-config.isLocal") == true) {
   ]);
 }
 
-// leave this as commented out. Only enable if debugging/testing as even basic
-// logging by ffmpeg will rapidly fill log file
+// capture the output stream and log to log file and console
+// hardcode to error otherwise the logging is very excessive
 
 transcodeStreamToOutput.stderr.on("data", (data) => {
-  //logger.log(
-  //  "error",
-  //  `${loggerFile}  stderr: ${new Date().toISOString()} ffmpeg: ${data}`
-  //);
+  logger.log(
+    "error",
+    `${loggerFile}  stderr: ${new Date().toISOString()} ffmpeg: ${data}`
+  );
 });
 
 // NOTE: TWO different handlers, the SIGTERM is for when running
@@ -224,18 +224,21 @@ transcodeStreamToOutput.stderr.on("data", (data) => {
 
 // event handler for docker stop, not exit until upload completes
 
+var timeoutExit = true;
+
 process.on("SIGTERM", (code, signal) => {
   logger.log(
     "info",
     `${loggerFile}: SIGTERM exited with code ${code} and signal ${signal}(SIGTERM)`
   );
+  timeoutExit = false;
   process.kill(transcodeStreamToOutput.pid, "SIGTERM");
 });
 
 // debug use - event handler for ctrl + c
-// do not use in production!
 
 process.on("SIGINT", (code, signal) => {
+  timeoutExit = false;
   logger.log(
     "info",
     `${loggerFile}: SIGINIT: exited with code ${code} and signal ${signal}(SIGINT)`
@@ -254,9 +257,16 @@ function saveFile(recordingName) {
 // as exit terminates before saved.
 
 process.on("beforeExit", (code) => {
+  // if timeout then log that maximum recording time reached
+  if (timeoutExit) {
+    logger.log(
+      "info",
+      `${loggerFile}: maximum recording time reached. ${s3FileName}`
+    );
+  }
   logger.log(
     "info",
-    `${loggerFile}: exit event occurred: saving and persisting to S3, file: ${s3FileName}`
+    `${loggerFile}: exit event occurred: recording timeout, saving and persisting to S3, file: ${s3FileName}`
   );
   saveFile(recordingName);
 });
