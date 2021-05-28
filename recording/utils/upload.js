@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 const AWS = require("aws-sdk");
-const logger = require("./utils/logger.js")(module);
+const logger = require("./logger.js")(module);
 const loggerFile = "[upload.js]";
 
 /**
