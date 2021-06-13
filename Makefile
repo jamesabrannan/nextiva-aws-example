@@ -102,7 +102,7 @@ create_configure_buckets:
 build_image:
 	$(eval ECR_ARN := $(shell docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr describe-repositories --region $(AWS_REGION) --repository-names $(ECR_REPOSITORY_NAME) | jq '.repositories[0].repositoryUri'))
 	docker run $(AWS_CREDS_BIND) amazon/aws-cli ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(ECR_ARN)
-	docker build -t $(ECR_REPOSITORY_NAME) .
+	docker build --no-cache -t $(ECR_REPOSITORY_NAME) .
 	docker tag $(ECR_REPOSITORY_NAME):$(DOCKER_TAG) $(ECR_ARN):$(DOCKER_TAG)
 	docker push $(ECR_ARN):$(DOCKER_TAG)
 
