@@ -184,14 +184,14 @@ if (DRY_RUN == "false") {
 
 // capture the output stream and log to log file and console
 // hardcode to error otherwise the logging is very excessive
-
-transcodeStreamToOutput.stderr.on("data", (data) => {
-  logger.log(
-    "error",
-    `${loggerFile}  stderr: ${new Date().toISOString()} ffmpeg: ${data}`
-  );
-});
-
+if (DRY_RUN == "false") {
+  transcodeStreamToOutput.stderr.on("data", (data) => {
+    logger.log(
+      "error",
+      `${loggerFile}  stderr: ${new Date().toISOString()} ffmpeg: ${data}`
+    );
+  });
+}
 // event handler for docker stop, not exit until upload completes
 
 process.on("SIGTERM", (code, signal) => {

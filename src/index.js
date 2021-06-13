@@ -75,6 +75,8 @@ exports.handler = function (event, context, callback) {
         );
         mediaCallId = event.queryStringParameters.mediaCallId;
         console.log("Recording bucket: " + recordingArtifactsBucket);
+        dryRun = even.queryStringParameters.dryRun;
+        console.log("Dry run:" + dryRun);
         return startRecording(
           event,
           context,
