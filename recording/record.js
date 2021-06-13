@@ -185,6 +185,10 @@ if (DRY_RUN == "false") {
 // capture the output stream and log to log file and console
 // hardcode to error otherwise the logging is very excessive
 if (DRY_RUN == "false") {
+  logger.log(
+    "debug",
+    `${loggerFile}: dry run false, on error, transcodeStreamToOutput`
+  );
   transcodeStreamToOutput.stderr.on("data", (data) => {
     logger.log(
       "error",
