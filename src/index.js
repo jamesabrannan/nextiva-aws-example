@@ -81,7 +81,8 @@ exports.handler = function (event, context, callback) {
           callback,
           meetingURL,
           corpAcctNum,
-          mediaCallId
+          mediaCallId,
+          dryRun
         );
       } else {
         responseBody = {
