@@ -11,9 +11,8 @@
  * recorded for saving as a file. Rather than duplicating docker/linux setup, set the
  * debug option to true and then use OSX with ffmpeg, as used in this script for simplicity
  *
- * If developing locally, before running, be certain to get the correct index number for screen
- * capture and audio capture using this command from command-line
- * ffmpeg -f avfoundation -list_devices true -i ""
+ * If running in DRY_RUN then skip processing and simply copy the sample video with the name and upload
+ * to S3 rather than recording. This is for testing without recording feature.
  *
  * call recording with bucket-name, corporate-account-id, media-call-id, screen width, screen height
  *
@@ -48,6 +47,7 @@ const BROWSER_SCREEN_HEIGHT = args[1];
 const BUCKET_NAME = args[2];
 const CORP_ACCNT_ID = args[3];
 const MEDIA_CALL_ID = args[4];
+const DRY_RUN = args[5];
 
 logger.log("debug", `arguments: ${args}`);
 
@@ -113,38 +113,9 @@ var transcodeStreamToOutput;
 var timeout = config.get("environment-config.recordTimeoutDuration");
 logger.log("debug", `${loggerFile}: TIMEOUT for video: ${timeout}`);
 
-if (config.get("environment-config.isLocal") == true) {
-  // debug settings for personal OSX computer's settings, see note above
-  // to determine these values
+// if not dry run then actually record desktop
 
-  var INPUT_SCREEN_CAPTURE = "1";
-  var INPUT_SOUND_CAPTURE = "0";
-
-  logger.log("debug", `${loggerFile}  in debug environment for ffmpeg`);
-  transcodeStreamToOutput = spawn("ffmpeg", [
-    "-f",
-    "avfoundation",
-    "-loglevel",
-    `${FFMPEG_LOG_LEVEL}`,
-    "-t",
-    `${timeout}`,
-    "-y",
-    "-i",
-    `${INPUT_SCREEN_CAPTURE}:${INPUT_SOUND_CAPTURE}`,
-    "-vf",
-    "crop=1020:1080:1:0",
-    "-pix_fmt",
-    "yuv420p",
-    "-y",
-    "-r",
-    "30",
-    `${recordingName}`
-  ]);
-} else {
-  logger.log(
-    "debug",
-    `${loggerFile}: running ffmpeg and not in debug environment.`
-  );
+if (DRY_RUN == "false") {
   transcodeStreamToOutput = spawn("ffmpeg", [
     "-hide_banner",
     "-loglevel",
@@ -206,6 +177,9 @@ if (config.get("environment-config.isLocal") == true) {
     `${timeout}`,
     `${recordingName}`
   ]);
+} else {
+  // DRY_RUN then simply use the sample video
+  recordingName = "./sample.mp4";
 }
 
 // capture the output stream and log to log file and console
@@ -218,10 +192,6 @@ transcodeStreamToOutput.stderr.on("data", (data) => {
   );
 });
 
-// NOTE: TWO different handlers, the SIGTERM is for when running
-// in Docker container and the SIGINIT is when running locally and
-// using ctrl-c to stop recording
-
 // event handler for docker stop, not exit until upload completes
 
 process.on("SIGTERM", (code, signal) => {
@@ -229,16 +199,7 @@ process.on("SIGTERM", (code, signal) => {
     "info",
     `${loggerFile}: SIGTERM exited with code ${code} and signal ${signal}(SIGTERM)`
   );
-  process.kill(transcodeStreamToOutput.pid, "SIGTERM");
-});
-
-// debug use - event handler for ctrl + c
-
-process.on("SIGINT", (code, signal) => {
-  logger.log(
-    "info",
-    `${loggerFile}: SIGINIT: exited with code ${code} and signal ${signal}(SIGINT)`
-  );
+  if (DRY_RUN == "false") process.kill(transcodeStreamToOutput.pid, "SIGTERM");
 });
 
 function saveFile(recordingName) {
