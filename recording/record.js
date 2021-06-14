@@ -51,6 +51,8 @@ const DRY_RUN = args[5];
 
 logger.log("debug", `arguments: ${args}`);
 
+logger.log("debug", `Dry run: ${DRY_RUN}`);
+
 logger.log(
   "info",
   `${loggerFile} BUCKET_NAME: ${BUCKET_NAME} CORP_ACCNT_ID: ${CORP_ACCNT_ID} MEDIA_CALL_ID: ${MEDIA_CALL_ID}`
